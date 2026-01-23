@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button } from 'components/button';
+import { Pulsing } from 'src/animations/pulsing';
 
 const options = ['Game', 'Movie', 'Book'];
 
@@ -12,21 +15,32 @@ export default function Index() {
   const onValueChange = (v: string) => setWhat(v);
 
   return (
-    <View style={styles.root}>
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={what}
-          itemStyle={styles.pickerItem}
-          onValueChange={onValueChange}
-        >
-          {options.map((option) => (
-            <Picker.Item key={option} label={option} value={option} />
-          ))}
-        </Picker>
+    <SafeAreaView style={styles.root}>
+      <View style={styles.content}>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={what}
+            itemStyle={styles.pickerItem}
+            onValueChange={onValueChange}
+          >
+            {options.map((option) => (
+              <Picker.Item key={option} label={option} value={option} />
+            ))}
+          </Picker>
+        </View>
+        <Text style={styles.ofTheText}>of the</Text>
+        <Text style={styles.yearText}>Year</Text>
       </View>
-      <Text style={styles.ofTheText}>of the</Text>
-      <Text style={styles.yearText}>Year</Text>
-    </View>
+
+      <Pulsing>
+        <Button
+          label="Start"
+          onPress={() => {
+            console.log('Start pressed');
+          }}
+        />
+      </Pulsing>
+    </SafeAreaView>
   );
 }
 
@@ -35,6 +49,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingHorizontal: 20,
+  },
+  content: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
