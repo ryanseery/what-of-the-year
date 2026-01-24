@@ -36,6 +36,18 @@ export default function Topic() {
     return <Loading color={determinedTopic.color} />;
   }
 
+  console.log({
+    gamesData,
+    gamesLoading,
+    gameError,
+    moviesData,
+    moviesLoading,
+    moviesError,
+    booksData,
+    booksLoading,
+    booksError,
+  });
+
   return (
     <SafeAreaView style={styles.root}>
       <Text style={[styles.text, { color: determinedTopic.color }]}>{determinedTopic.label}</Text>
