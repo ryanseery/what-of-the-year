@@ -66,6 +66,11 @@ export function formGameOptions(games: Game[]): Option[] {
 
 const GAMES_QUERY_KEY = TOPIC_KEY.GAMES;
 
+/**
+ * Hook to fetch games data for the current year
+ * @param key - The topic key to determine if this hook should be enabled.
+ * Only fetches data when key matches TOPIC_KEY.GAMES to avoid unnecessary API calls.
+ */
 export function useGames(key: TOPIC_KEY) {
   const enabled = key === GAMES_QUERY_KEY;
   return useQuery({

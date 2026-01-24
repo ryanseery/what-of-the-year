@@ -74,6 +74,11 @@ export function formMovieOptions(movies: Movie[]): Option[] {
 
 const MOVIES_QUERY_KEY = TOPIC_KEY.MOVIES;
 
+/**
+ * Hook to fetch movies data for the current year
+ * @param key - The topic key to determine if this hook should be enabled.
+ * Only fetches data when key matches TOPIC_KEY.MOVIES to avoid unnecessary API calls.
+ */
 export function useMovies(key: TOPIC_KEY) {
   const enabled = key === MOVIES_QUERY_KEY;
   return useQuery({

@@ -84,6 +84,11 @@ export function formBookOptions(books: Book[]): Option[] {
 
 const BOOK_QUERY_KEY = TOPIC_KEY.BOOKS;
 
+/**
+ * Hook to fetch books data for the current year
+ * @param key - The topic key to determine if this hook should be enabled.
+ * Only fetches data when key matches TOPIC_KEY.BOOKS to avoid unnecessary API calls.
+ */
 export function useBooks(key: TOPIC_KEY) {
   const enabled = key === BOOK_QUERY_KEY;
   return useQuery({
