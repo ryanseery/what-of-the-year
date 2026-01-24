@@ -3,7 +3,7 @@ import { StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getTopic } from 'constants/topics';
 
-export default function TopicScreen() {
+export default function Topic() {
   const { topic } = useLocalSearchParams<{ topic?: string }>();
 
   const color = getTopic(topic);

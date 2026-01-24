@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
-import { router } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from 'components/button';
@@ -33,16 +33,15 @@ export default function Index() {
         <Text style={styles.yearText}>Year</Text>
       </View>
 
-      <Button
-        label="Start"
-        style={{ backgroundColor: color }}
-        onPress={() => {
-          router.push({
-            pathname: '/[topic]',
-            params: { topic },
-          });
+      <Link
+        asChild
+        href={{
+          pathname: '/[topic]',
+          params: { topic: topic },
         }}
-      />
+      >
+        <Button label="Start" style={{ backgroundColor: color }} />
+      </Link>
     </SafeAreaView>
   );
 }

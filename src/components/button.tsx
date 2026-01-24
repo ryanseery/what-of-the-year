@@ -10,7 +10,7 @@ import { flatten } from 'utils/styles';
 
 interface Props {
   label: string;
-  onPress: () => void;
+  onPress?: () => void;
   style?: StyleProp<ViewStyle>;
 }
 export function Button({ label, onPress, style }: Props) {
