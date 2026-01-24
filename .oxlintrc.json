@@ -3,6 +3,7 @@
     "react/jsx-key": "error",
     "react/no-children-prop": "error",
     "react-perf/jsx-no-new-object-as-prop": "off",
-    "typescript/no-explicit-any": "error"
+    "typescript/no-explicit-any": "error",
+    "no-console": "warn"
   }
 }

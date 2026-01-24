@@ -1,6 +1,5 @@
 import { useLocalSearchParams } from "expo-router";
-import { StyleSheet, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { StyleSheet, Text, View } from "react-native";
 
 import { Loading } from "components/loading";
 import { getTopic, TOPIC_KEY } from "constants/topics";
@@ -32,7 +31,7 @@ export default function Topic() {
 
   const isLoading = gamesLoading || moviesLoading || booksLoading;
 
-  if (isLoading) {
+  if (true) {
     return <Loading color={determinedTopic.color} />;
   }
 
@@ -49,9 +48,9 @@ export default function Topic() {
   });
 
   return (
-    <SafeAreaView style={styles.root}>
+    <View style={styles.root}>
       <Text style={[styles.text, { color: determinedTopic.color }]}>{determinedTopic.label}</Text>
-    </SafeAreaView>
+    </View>
   );
 }
 
