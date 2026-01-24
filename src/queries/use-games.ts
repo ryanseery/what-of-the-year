@@ -1,26 +1,32 @@
 import { useQuery } from '@tanstack/react-query';
 import { TOPIC_KEY } from 'constants/topics';
+import { currentYear } from 'utils/dates';
+import { handleError, STALE_TIME } from './utils';
+import type { Option } from 'types/option';
 
 const IGDB_API_URL = process.env.EXPO_PUBLIC_IGDB_API_URL;
-const CLIENT_ID = process.env.EXPO_PUBLIC_IGDB_CLIENT_ID || '';
-const ACCESS_TOKEN = process.env.EXPO_PUBLIC_IGDB_ACCESS_TOKEN || '';
+const CLIENT_ID = process.env.EXPO_PUBLIC_IGDB_CLIENT_ID!;
+const ACCESS_TOKEN = process.env.EXPO_PUBLIC_IGDB_ACCESS_TOKEN;
 
 interface Game {
   id: number;
   name: string;
-  cover?: {
+  cover: {
     id: number;
     url: string;
   };
+  /** Average IGDB user rating (0-100) */
   rating?: number;
-  first_release_date?: number;
-  summary?: string;
+  /** Rating based on external critic scores (0-100) */
+  aggregated_rating: number;
+  /** Average rating based on both IGDB user and external critic scores (0-100) */
+  total_rating: number;
+  first_release_date: number;
+  summary: string;
 }
 
 async function getGamesForYear(): Promise<Game[]> {
-  const currentYear = new Date().getFullYear();
-  const startDate = new Date(currentYear, 0, 1).getTime() / 1000;
-  const endDate = new Date(currentYear, 11, 31).getTime() / 1000;
+  const { startDate, endDate } = currentYear();
 
   const response = await fetch(`${IGDB_API_URL}/games`, {
     method: 'POST',
@@ -30,18 +36,15 @@ async function getGamesForYear(): Promise<Game[]> {
       'Content-Type': 'text/plain',
     },
     body: `
-      fields name, cover.url, rating, first_release_date, summary;
+      fields name, cover.url, rating, aggregated_rating, total_rating, first_release_date, summary;
       where first_release_date >= ${startDate} & first_release_date < ${endDate};
-      sort rating desc;
-      limit 500;
+      sort total_rating desc;
+      limit 100;
     `,
   });
 
   if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(
-      `IGDB API error (${response.status}): ${errorText || response.statusText}`,
-    );
+    await handleError('IGDB', response);
   }
 
   const data = await response.json();
@@ -49,11 +52,23 @@ async function getGamesForYear(): Promise<Game[]> {
   return data;
 }
 
+function formGameOptions(games: Game[]): Option[] {
+  return games.map((game) => ({
+    id: game.id,
+    name: game.name,
+    cover: game.cover?.url,
+    rating: game.total_rating,
+    first_release_date: game.first_release_date,
+    summary: game.summary,
+  }));
+}
+
 export function useGames(enabled: boolean = false) {
   return useQuery({
     queryKey: [TOPIC_KEY.GAMES],
-    queryFn: () => getGamesForYear(),
-    staleTime: 0, // Disable caching during development
+    queryFn: getGamesForYear,
+    select: formGameOptions,
+    staleTime: STALE_TIME,
     enabled,
   });
 }

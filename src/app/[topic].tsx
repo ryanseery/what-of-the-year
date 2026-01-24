@@ -2,20 +2,42 @@ import { useLocalSearchParams } from 'expo-router';
 import { StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getTopic, TOPIC_KEY } from 'constants/topics';
+import { useBooks } from 'queries/use-books';
 import { useGames } from 'queries/use-games';
+import { useMovies } from 'queries/use-movies';
 
 export default function Topic() {
   const { topic } = useLocalSearchParams<{ topic?: TOPIC_KEY }>();
   const determinedTopic = getTopic(topic);
 
-  const { data, isLoading, error } = useGames(
-    determinedTopic.key === TOPIC_KEY.GAMES,
-  );
+  const {
+    data: gamesData,
+    isLoading: gamesLoading,
+    error: gameError,
+  } = useGames(determinedTopic.key === TOPIC_KEY.GAMES);
+
+  const {
+    data: moviesData,
+    isLoading: moviesLoading,
+    error: moviesError,
+  } = useMovies(determinedTopic.key === TOPIC_KEY.MOVIES);
+
+  const {
+    data: booksData,
+    isLoading: booksLoading,
+    error: booksError,
+  } = useBooks(determinedTopic.key === TOPIC_KEY.BOOKS);
 
   console.log({
-    data,
-    isLoading,
-    error,
+    gamesData,
+    gamesLoading,
+    gameError,
+    moviesData,
+    moviesLoading,
+    moviesError,
+    booksData,
+    booksLoading,
+    booksError,
   });
 
   return (
