@@ -24,6 +24,7 @@ module.exports = defineConfig([
             { pattern: 'components/**', group: 'internal', position: 'before' },
             { pattern: 'constants/**', group: 'internal', position: 'before' },
             { pattern: 'hooks/**', group: 'internal', position: 'before' },
+            { pattern: 'queries/**', group: 'internal', position: 'before' },
             { pattern: 'services/**', group: 'internal', position: 'before' },
             { pattern: 'utils/**', group: 'internal', position: 'before' },
           ],

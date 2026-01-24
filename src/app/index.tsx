@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
-import { Link, router } from 'expo-router';
+import { Link } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from 'components/button';
@@ -9,11 +9,11 @@ import { getTopic, topics } from 'constants/topics';
 const fontColor = '#333';
 
 export default function Index() {
-  const [topic, setTopic] = useState('Game');
+  const [topic, setTopic] = useState('games');
 
   const onValueChange = (v: string) => setTopic(v);
 
-  const color = getTopic(topic);
+  const determinedTopic = getTopic(topic);
 
   return (
     <SafeAreaView style={styles.root}>
@@ -21,11 +21,11 @@ export default function Index() {
         <View style={styles.pickerContainer}>
           <Picker
             selectedValue={topic}
-            itemStyle={[styles.pickerItem, { color }]}
+            itemStyle={[styles.pickerItem, { color: determinedTopic.color }]}
             onValueChange={onValueChange}
           >
             {topics.map((t) => (
-              <Picker.Item key={t.key} label={t.key} value={t.key} />
+              <Picker.Item key={t.key} label={t.label} value={t.key} />
             ))}
           </Picker>
         </View>
@@ -37,10 +37,13 @@ export default function Index() {
         asChild
         href={{
           pathname: '/[topic]',
-          params: { topic: topic },
+          params: { topic },
         }}
       >
-        <Button label="Start" style={{ backgroundColor: color }} />
+        <Button
+          label="Start"
+          style={{ backgroundColor: determinedTopic.color }}
+        />
       </Link>
     </SafeAreaView>
   );

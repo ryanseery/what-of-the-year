@@ -8,8 +8,9 @@
       "components/*": ["src/components/*"],
       "constants/*": ["src/constants/*"],
       "hooks/*": ["src/hooks/*"],
+      "queries/*": ["src/queries/*"],
+      "types/*": ["src/types/*"],
       "utils/*": ["src/utils/*"],
-      "types/*": ["src/types/*"]
     }
   },
   "include": [

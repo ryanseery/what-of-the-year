@@ -1,11 +1,8 @@
 export const topics = [
-  { key: 'Game', color: 'black' },
-  { key: 'Movie', color: 'blue' },
-  { key: 'Book', color: 'green' },
+  { key: 'games', label: 'Game', color: 'black' },
+  { key: 'movies', label: 'Movie', color: 'blue' },
+  { key: 'books', label: 'Book', color: 'green' },
 ];
 
-export function getTopic(topic?: string) {
-  const config = topics.find((t) => t.key === topic);
-
-  return config?.color ?? 'black';
-}
+export const getTopic = (topic?: string) =>
+  topics.find((t) => t.key === topic)!;
