@@ -1,8 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import { TOPIC_KEY } from 'constants/topics';
-import { currentYear } from 'utils/dates';
-import { handleError, STALE_TIME } from './utils';
-import type { Option } from 'types/option';
+import { useQuery } from "@tanstack/react-query";
+import { TOPIC_KEY } from "constants/topics";
+import type { Option } from "types/option";
+import { currentYear } from "utils/dates";
+
+import { handleError, STALE_TIME } from "./utils";
 
 const IGDB_API_URL = process.env.EXPO_PUBLIC_IGDB_API_URL;
 const CLIENT_ID = process.env.EXPO_PUBLIC_IGDB_CLIENT_ID!;
@@ -29,11 +30,11 @@ async function getGamesForYear(): Promise<Game[]> {
   const { startDate, endDate } = currentYear();
 
   const response = await fetch(`${IGDB_API_URL}/games`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Client-ID': CLIENT_ID,
+      "Client-ID": CLIENT_ID,
       Authorization: `Bearer ${ACCESS_TOKEN}`,
-      'Content-Type': 'text/plain',
+      "Content-Type": "text/plain",
     },
     body: `
       fields name, cover.url, rating, aggregated_rating, total_rating, first_release_date, summary;
@@ -44,7 +45,7 @@ async function getGamesForYear(): Promise<Game[]> {
   });
 
   if (!response.ok) {
-    await handleError('IGDB', response);
+    await handleError("IGDB", response);
   }
 
   const data = await response.json();

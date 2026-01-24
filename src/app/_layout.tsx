@@ -1,5 +1,5 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Stack } from 'expo-router';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Stack } from "expo-router";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,8 +19,8 @@ export default function RootLayout() {
           name="[topic]"
           options={{
             headerShown: true,
-            title: '',
-            headerBackButtonDisplayMode: 'minimal',
+            title: "",
+            headerBackButtonDisplayMode: "minimal",
             headerShadowVisible: false,
           }}
         />

@@ -1,8 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import { TOPIC_KEY } from 'constants/topics';
-import { currentYear } from 'utils/dates';
-import { handleError, STALE_TIME } from './utils';
-import type { Option } from 'types/option';
+import { useQuery } from "@tanstack/react-query";
+import { TOPIC_KEY } from "constants/topics";
+import type { Option } from "types/option";
+import { currentYear } from "utils/dates";
+
+import { handleError, STALE_TIME } from "./utils";
 
 const TMDB_API_URL = process.env.EXPO_PUBLIC_TMDB_TMDB_API_URL;
 const TMDB_API_KEY = process.env.EXPO_PUBLIC_TMDB_API_KEY;
@@ -48,7 +49,7 @@ async function getMoviesForYear(): Promise<Movie[]> {
     );
 
     if (!response.ok) {
-      await handleError('TMDB', response);
+      await handleError("TMDB", response);
     }
 
     const data: TMDBResponse = await response.json();
@@ -64,9 +65,7 @@ export function formMovieOptions(movies: Movie[]): Option[] {
   return movies.map((movie) => ({
     id: movie.id,
     name: movie.title,
-    cover: movie.poster_path
-      ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-      : undefined,
+    cover: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : undefined,
     rating: movie.vote_average * 10, // Convert 0-10 to 0-100 scale
     first_release_date: new Date(movie.release_date).getTime() / 1000,
     summary: movie.overview,

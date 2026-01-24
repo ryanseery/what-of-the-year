@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { Picker } from '@react-native-picker/picker';
-import { Link } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button } from 'components/button';
-import { getTopic, TOPIC_KEY, topics } from 'constants/topics';
+import { Picker } from "@react-native-picker/picker";
+import { Button } from "components/button";
+import { getTopic, TOPIC_KEY, topics } from "constants/topics";
+import { Link } from "expo-router";
+import { useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const fontColor = '#333';
+const fontColor = "#333";
 
 export default function Index() {
   const [topic, setTopic] = useState<TOPIC_KEY>(TOPIC_KEY.GAMES);
@@ -36,14 +36,11 @@ export default function Index() {
       <Link
         asChild
         href={{
-          pathname: '/[topic]',
+          pathname: "/[topic]",
           params: { topic },
         }}
       >
-        <Button
-          label="Start"
-          style={{ backgroundColor: determinedTopic.color }}
-        />
+        <Button label="Start" style={{ backgroundColor: determinedTopic.color }} />
       </Link>
     </SafeAreaView>
   );
@@ -52,32 +49,32 @@ export default function Index() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     paddingHorizontal: 20,
   },
   content: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   pickerContainer: {
-    width: '100%',
-    overflow: 'hidden',
+    width: "100%",
+    overflow: "hidden",
   },
   pickerItem: {
     fontSize: 72,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     height: 88,
   },
   ofTheText: {
     fontSize: 52,
-    fontWeight: '700',
+    fontWeight: "700",
     color: fontColor,
     marginVertical: 16,
   },
   yearText: {
     fontSize: 72,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: fontColor,
   },
 });

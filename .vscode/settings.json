@@ -4,8 +4,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "explicit"
   },
-  "cSpell.words": [
-    "IGDB",
-    "TMDB"
-  ]
+  "cSpell.words": ["IGDB", "TMDB"]
 }

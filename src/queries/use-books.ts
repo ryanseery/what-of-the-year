@@ -1,8 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import { TOPIC_KEY } from 'constants/topics';
-import { currentYear } from 'utils/dates';
-import { handleError, STALE_TIME } from './utils';
-import type { Option } from 'types/option';
+import { useQuery } from "@tanstack/react-query";
+import { TOPIC_KEY } from "constants/topics";
+import type { Option } from "types/option";
+import { currentYear } from "utils/dates";
+
+import { handleError, STALE_TIME } from "./utils";
 
 const GOOGLE_BOOKS_API_URL = process.env.EXPO_PUBLIC_GOOGLE_BOOKS_API_URL;
 const GOOGLE_BOOKS_API_KEY = process.env.EXPO_PUBLIC_GOOGLE_BOOKS_API_KEY;
@@ -51,7 +52,7 @@ async function getBooksForYear(): Promise<Book[]> {
     );
 
     if (!response.ok) {
-      await handleError('Google Books', response);
+      await handleError("Google Books", response);
     }
 
     const data: GoogleBooksResponse = await response.json();
@@ -70,14 +71,13 @@ async function getBooksForYear(): Promise<Book[]> {
 
 export function formBookOptions(books: Book[]): Option[] {
   return books.map((book) => ({
-    id: typeof book.id === 'string' ? parseInt(book.id, 36) : 0, // Convert string ID to number
+    id: typeof book.id === "string" ? parseInt(book.id, 36) : 0, // Convert string ID to number
     name: book.volumeInfo.title,
-    cover: book.volumeInfo.imageLinks?.thumbnail?.replace('http:', 'https:'),
+    cover: book.volumeInfo.imageLinks?.thumbnail?.replace("http:", "https:"),
     rating: book.volumeInfo.averageRating
       ? book.volumeInfo.averageRating * 20 // Convert 0-5 to 0-100 scale
       : 0,
-    first_release_date:
-      new Date(book.volumeInfo.publishedDate).getTime() / 1000,
+    first_release_date: new Date(book.volumeInfo.publishedDate).getTime() / 1000,
     summary: book.volumeInfo.description,
   }));
 }

@@ -1,10 +1,10 @@
-import { useLocalSearchParams } from 'expo-router';
-import { StyleSheet, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { getTopic, TOPIC_KEY } from 'constants/topics';
-import { useBooks } from 'queries/use-books';
-import { useGames } from 'queries/use-games';
-import { useMovies } from 'queries/use-movies';
+import { getTopic, TOPIC_KEY } from "constants/topics";
+import { useLocalSearchParams } from "expo-router";
+import { useBooks } from "queries/use-books";
+import { useGames } from "queries/use-games";
+import { useMovies } from "queries/use-movies";
+import { StyleSheet, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Topic() {
   const { topic } = useLocalSearchParams<{ topic?: TOPIC_KEY }>();
@@ -42,9 +42,7 @@ export default function Topic() {
 
   return (
     <SafeAreaView style={styles.root}>
-      <Text style={[styles.text, { color: determinedTopic.color }]}>
-        {determinedTopic.label}
-      </Text>
+      <Text style={[styles.text, { color: determinedTopic.color }]}>{determinedTopic.label}</Text>
     </SafeAreaView>
   );
 }
@@ -52,11 +50,11 @@ export default function Topic() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     paddingHorizontal: 20,
   },
   text: {
     fontSize: 56,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });

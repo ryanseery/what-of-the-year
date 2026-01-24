@@ -5,8 +5,8 @@ import {
   StyleSheet,
   Text,
   ViewStyle,
-} from 'react-native';
-import { flatten } from 'utils/styles';
+} from "react-native";
+import { flatten } from "utils/styles";
 
 interface Props {
   label: string;
@@ -30,19 +30,19 @@ export function Button({ label, onPress, style }: Props) {
 }
 const styles = StyleSheet.create({
   root: {
-    width: '100%',
-    backgroundColor: '#111',
+    width: "100%",
+    backgroundColor: "#111",
     borderRadius: 16,
     paddingVertical: 16,
-    alignItems: 'center',
+    alignItems: "center",
   },
   pressed: {
-    backgroundColor: '#000',
+    backgroundColor: "#000",
   },
   text: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 22,
-    fontWeight: '800',
+    fontWeight: "800",
     letterSpacing: 0.5,
   },
 });
