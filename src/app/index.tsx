@@ -1,10 +1,11 @@
 import { Picker } from "@react-native-picker/picker";
-import { Button } from "components/button";
-import { getTopic, TOPIC_KEY, topics } from "constants/topics";
 import { Link } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import { Button } from "components/button";
+import { getTopic, TOPIC_KEY, topics } from "constants/topics";
 
 const fontColor = "#333";
 

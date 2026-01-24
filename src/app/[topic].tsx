@@ -1,10 +1,11 @@
-import { getTopic, TOPIC_KEY } from "constants/topics";
 import { useLocalSearchParams } from "expo-router";
+import { StyleSheet, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import { getTopic, TOPIC_KEY } from "constants/topics";
 import { useBooks } from "queries/use-books";
 import { useGames } from "queries/use-games";
 import { useMovies } from "queries/use-movies";
-import { StyleSheet, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Topic() {
   const { topic } = useLocalSearchParams<{ topic?: TOPIC_KEY }>();

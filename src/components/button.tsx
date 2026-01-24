@@ -6,6 +6,7 @@ import {
   Text,
   ViewStyle,
 } from "react-native";
+
 import { flatten } from "utils/styles";
 
 interface Props {

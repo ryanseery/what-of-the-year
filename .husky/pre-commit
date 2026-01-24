@@ -1,5 +1,19 @@
-# Run lint-staged (lints only staged files)
-bunx lint-staged
+# Get staged TypeScript files
+
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(tsx?|ts)$' || true)
+
+if [ -n "$STAGED_FILES" ]; then
+
+# Format and lint staged files
+
+bunx oxfmt $STAGED_FILES
+bunx oxlint --fix $STAGED_FILES
+
+# Re-add formatted files
+
+git add $STAGED_FILES
+fi
 
 # Run all tests
+
 bun test
