@@ -11,28 +11,26 @@ export default function Topic() {
   const { topic } = useLocalSearchParams<{ topic?: TOPIC_KEY }>();
   const { key, color, label } = getTopic(topic);
 
-  const { data: gamesData, isLoading: gamesLoading, error: gameError } = useGames(key);
+  const { data: gData, isLoading: gLoading, error: gError } = useGames(key);
 
-  const { data: moviesData, isLoading: moviesLoading, error: moviesError } = useMovies(key);
+  const { data: mData, isLoading: mLoading, error: mError } = useMovies(key);
 
-  const { data: booksData, isLoading: booksLoading, error: booksError } = useBooks(key);
+  const { data: bData, isLoading: bLoading, error: bError } = useBooks(key);
 
-  const isLoading = gamesLoading || moviesLoading || booksLoading;
+  const isLoading = gLoading || mLoading || bLoading;
 
-  if (isLoading) {
-    return <Loading color={color} />;
-  }
+  if (isLoading) return <Loading color={color} />;
 
   console.log({
-    gamesData,
-    gamesLoading,
-    gameError,
-    moviesData,
-    moviesLoading,
-    moviesError,
-    booksData,
-    booksLoading,
-    booksError,
+    gData,
+    gLoading,
+    gError,
+    mData,
+    mLoading,
+    mError,
+    bData,
+    bLoading,
+    bError,
   });
 
   return (
