@@ -60,7 +60,7 @@ async function getMoviesForYear(): Promise<Movie[]> {
   return allMovies;
 }
 
-function formMovieOptions(movies: Movie[]): Option[] {
+export function formMovieOptions(movies: Movie[]): Option[] {
   return movies.map((movie) => ({
     id: movie.id,
     name: movie.title,

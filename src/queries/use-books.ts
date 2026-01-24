@@ -68,7 +68,7 @@ async function getBooksForYear(): Promise<Book[]> {
   return allBooks;
 }
 
-function formBookOptions(books: Book[]): Option[] {
+export function formBookOptions(books: Book[]): Option[] {
   return books.map((book) => ({
     id: typeof book.id === 'string' ? parseInt(book.id, 36) : 0, // Convert string ID to number
     name: book.volumeInfo.title,

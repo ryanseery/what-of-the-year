@@ -11,7 +11,7 @@ const ACCESS_TOKEN = process.env.EXPO_PUBLIC_IGDB_ACCESS_TOKEN;
 interface Game {
   id: number;
   name: string;
-  cover: {
+  cover?: {
     id: number;
     url: string;
   };
@@ -52,7 +52,7 @@ async function getGamesForYear(): Promise<Game[]> {
   return data;
 }
 
-function formGameOptions(games: Game[]): Option[] {
+export function formGameOptions(games: Game[]): Option[] {
   return games.map((game) => ({
     id: game.id,
     name: game.name,

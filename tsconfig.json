@@ -3,6 +3,7 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": ".",
+    "types": ["bun-types"],
     "paths": {
       "app/*": ["src/app/*"],
       "components/*": ["src/components/*"],
