@@ -64,9 +64,12 @@ export function formGameOptions(games: Game[]): Option[] {
   }));
 }
 
-export function useGames(enabled: boolean = false) {
+const GAMES_QUERY_KEY = TOPIC_KEY.GAMES;
+
+export function useGames(key: TOPIC_KEY) {
+  const enabled = key === GAMES_QUERY_KEY;
   return useQuery({
-    queryKey: [TOPIC_KEY.GAMES],
+    queryKey: [GAMES_QUERY_KEY],
     queryFn: getGamesForYear,
     select: formGameOptions,
     staleTime: STALE_TIME,

@@ -72,9 +72,12 @@ export function formMovieOptions(movies: Movie[]): Option[] {
   }));
 }
 
-export function useMovies(enabled: boolean = false) {
+const MOVIES_QUERY_KEY = TOPIC_KEY.MOVIES;
+
+export function useMovies(key: TOPIC_KEY) {
+  const enabled = key === MOVIES_QUERY_KEY;
   return useQuery({
-    queryKey: [TOPIC_KEY.MOVIES],
+    queryKey: [MOVIES_QUERY_KEY],
     queryFn: getMoviesForYear,
     select: formMovieOptions,
     staleTime: STALE_TIME,

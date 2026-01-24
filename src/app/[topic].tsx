@@ -9,30 +9,18 @@ import { useMovies } from "queries/use-movies";
 
 export default function Topic() {
   const { topic } = useLocalSearchParams<{ topic?: TOPIC_KEY }>();
-  const determinedTopic = getTopic(topic);
+  const { key, color, label } = getTopic(topic);
 
-  const {
-    data: gamesData,
-    isLoading: gamesLoading,
-    error: gameError,
-  } = useGames(determinedTopic.key === TOPIC_KEY.GAMES);
+  const { data: gamesData, isLoading: gamesLoading, error: gameError } = useGames(key);
 
-  const {
-    data: moviesData,
-    isLoading: moviesLoading,
-    error: moviesError,
-  } = useMovies(determinedTopic.key === TOPIC_KEY.MOVIES);
+  const { data: moviesData, isLoading: moviesLoading, error: moviesError } = useMovies(key);
 
-  const {
-    data: booksData,
-    isLoading: booksLoading,
-    error: booksError,
-  } = useBooks(determinedTopic.key === TOPIC_KEY.BOOKS);
+  const { data: booksData, isLoading: booksLoading, error: booksError } = useBooks(key);
 
   const isLoading = gamesLoading || moviesLoading || booksLoading;
 
-  if (true) {
-    return <Loading color={determinedTopic.color} />;
+  if (isLoading) {
+    return <Loading color={color} />;
   }
 
   console.log({
@@ -49,7 +37,7 @@ export default function Topic() {
 
   return (
     <View style={styles.root}>
-      <Text style={[styles.text, { color: determinedTopic.color }]}>{determinedTopic.label}</Text>
+      <Text style={[styles.text, { color }]}>{label}</Text>
     </View>
   );
 }
@@ -59,11 +47,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     paddingHorizontal: 20,
-  },
-  loadingContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
   text: {
     fontSize: 56,

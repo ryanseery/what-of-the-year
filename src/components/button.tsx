@@ -1,34 +1,35 @@
 import {
   Pressable,
+  PressableProps,
   PressableStateCallbackType,
-  StyleProp,
   StyleSheet,
   Text,
-  ViewStyle,
 } from "react-native";
 
 import { flatten } from "utils/styles";
 
-interface Props {
+interface Props extends PressableProps {
   label: string;
-  onPress?: () => void;
-  style?: StyleProp<ViewStyle>;
 }
-export function Button({ label, onPress, style }: Props) {
-  const fStyle = ({ pressed }: PressableStateCallbackType) =>
-    flatten([styles.root, pressed && styles.pressed, style]);
+
+export function Button({ label, style, ...pressableProps }: Props) {
+  const fStyle = (state: PressableStateCallbackType) => {
+    const resolvedStyle = typeof style === "function" ? style(state) : style;
+    return flatten([styles.root, resolvedStyle, state.pressed && styles.pressed]);
+  };
 
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={label}
-      onPress={onPress}
       style={fStyle}
+      {...pressableProps}
     >
       <Text style={styles.text}>{label}</Text>
     </Pressable>
   );
 }
+
 const styles = StyleSheet.create({
   root: {
     width: "100%",
@@ -37,13 +38,12 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     alignItems: "center",
   },
-  pressed: {
-    backgroundColor: "#000",
-  },
   text: {
     color: "#fff",
     fontSize: 22,
     fontWeight: "800",
-    letterSpacing: 0.5,
+  },
+  pressed: {
+    opacity: 0.7,
   },
 });

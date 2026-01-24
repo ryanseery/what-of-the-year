@@ -82,9 +82,12 @@ export function formBookOptions(books: Book[]): Option[] {
   }));
 }
 
-export function useBooks(enabled: boolean = false) {
+const BOOK_QUERY_KEY = TOPIC_KEY.BOOKS;
+
+export function useBooks(key: TOPIC_KEY) {
+  const enabled = key === BOOK_QUERY_KEY;
   return useQuery({
-    queryKey: [TOPIC_KEY.BOOKS],
+    queryKey: [BOOK_QUERY_KEY],
     queryFn: getBooksForYear,
     select: formBookOptions,
     staleTime: STALE_TIME,
