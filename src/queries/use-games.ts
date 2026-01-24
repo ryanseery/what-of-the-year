@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
+import { TOPIC_KEY } from 'constants/topics';
 
 const IGDB_API_URL = process.env.EXPO_PUBLIC_IGDB_API_URL;
 const CLIENT_ID = process.env.EXPO_PUBLIC_IGDB_CLIENT_ID || '';
 const ACCESS_TOKEN = process.env.EXPO_PUBLIC_IGDB_ACCESS_TOKEN || '';
 
-export interface Game {
+interface Game {
   id: number;
   name: string;
   cover?: {
@@ -50,7 +51,7 @@ async function getGamesForYear(): Promise<Game[]> {
 
 export function useGames(enabled: boolean = false) {
   return useQuery({
-    queryKey: ['games'],
+    queryKey: [TOPIC_KEY.GAMES],
     queryFn: () => getGamesForYear(),
     staleTime: 0, // Disable caching during development
     enabled,

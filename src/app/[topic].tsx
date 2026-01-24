@@ -1,14 +1,16 @@
 import { useLocalSearchParams } from 'expo-router';
 import { StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getTopic } from 'constants/topics';
+import { getTopic, TOPIC_KEY } from 'constants/topics';
 import { useGames } from 'queries/use-games';
 
 export default function Topic() {
-  const { topic } = useLocalSearchParams<{ topic?: string }>();
+  const { topic } = useLocalSearchParams<{ topic?: TOPIC_KEY }>();
   const determinedTopic = getTopic(topic);
 
-  const { data, isLoading, error } = useGames(determinedTopic.key === 'games');
+  const { data, isLoading, error } = useGames(
+    determinedTopic.key === TOPIC_KEY.GAMES,
+  );
 
   console.log({
     data,

@@ -4,14 +4,14 @@ import { Link } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from 'components/button';
-import { getTopic, topics } from 'constants/topics';
+import { getTopic, TOPIC_KEY, topics } from 'constants/topics';
 
 const fontColor = '#333';
 
 export default function Index() {
-  const [topic, setTopic] = useState('games');
+  const [topic, setTopic] = useState<TOPIC_KEY>(TOPIC_KEY.GAMES);
 
-  const onValueChange = (v: string) => setTopic(v);
+  const onValueChange = (v: TOPIC_KEY) => setTopic(v);
 
   const determinedTopic = getTopic(topic);
 
