@@ -50,6 +50,5 @@
     "oxfmt": "^0.26.0",
     "oxlint": "^1.41.0",
     "typescript": "~5.9.2"
-  },
-  "private": true
+  }
 }

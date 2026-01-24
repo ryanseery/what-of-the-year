@@ -1,10 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 
+import { handleError, STALE_TIME } from "./utils";
 import { TOPIC_KEY } from "constants/topics";
 import type { Option } from "types/option";
 import { currentYear } from "utils/dates";
-
-import { handleError, STALE_TIME } from "./utils";
 
 const IGDB_API_URL = process.env.EXPO_PUBLIC_IGDB_API_URL;
 const CLIENT_ID = process.env.EXPO_PUBLIC_IGDB_CLIENT_ID!;

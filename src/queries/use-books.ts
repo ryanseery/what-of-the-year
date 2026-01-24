@@ -1,10 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 
+import { handleError, STALE_TIME } from "./utils";
 import { TOPIC_KEY } from "constants/topics";
 import type { Option } from "types/option";
 import { currentYear } from "utils/dates";
-
-import { handleError, STALE_TIME } from "./utils";
 
 const GOOGLE_BOOKS_API_URL = process.env.EXPO_PUBLIC_GOOGLE_BOOKS_API_URL;
 const GOOGLE_BOOKS_API_KEY = process.env.EXPO_PUBLIC_GOOGLE_BOOKS_API_KEY;
