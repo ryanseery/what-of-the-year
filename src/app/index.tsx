@@ -9,6 +9,7 @@ import { getTopic, TOPIC_KEY, topics } from "constants/topics";
 
 const fontColor = "#333";
 
+// 1. picker is borked on web
 export default function Index() {
   const [topic, setTopic] = useState<TOPIC_KEY>(TOPIC_KEY.GAMES);
 

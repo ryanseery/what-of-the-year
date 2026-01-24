@@ -1,6 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 
+import { getTopic, TOPIC_KEY } from "constants/topics";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -17,11 +19,15 @@ export default function RootLayout() {
         <Stack.Screen name="index" />
         <Stack.Screen
           name="[topic]"
-          options={{
-            headerShown: true,
-            title: "",
-            headerBackButtonDisplayMode: "minimal",
-            headerShadowVisible: false,
+          options={({ route }) => {
+            const params = route.params as { topic?: string } | undefined;
+            const label = getTopic(params?.topic as TOPIC_KEY).label;
+            return {
+              headerShown: true,
+              title: `${label} of the Year`,
+              headerBackButtonDisplayMode: "minimal",
+              headerShadowVisible: false,
+            };
           }}
         />
       </Stack>
