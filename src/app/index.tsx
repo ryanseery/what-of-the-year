@@ -1,30 +1,31 @@
 import { useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
+import { router } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from 'components/button';
-import { Pulsing } from 'src/animations/pulsing';
-
-const options = ['Game', 'Movie', 'Book'];
+import { getTopic, topics } from 'constants/topics';
 
 const fontColor = '#333';
 
 export default function Index() {
-  const [what, setWhat] = useState('Game');
+  const [topic, setTopic] = useState('Game');
 
-  const onValueChange = (v: string) => setWhat(v);
+  const onValueChange = (v: string) => setTopic(v);
+
+  const color = getTopic(topic);
 
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.content}>
         <View style={styles.pickerContainer}>
           <Picker
-            selectedValue={what}
-            itemStyle={styles.pickerItem}
+            selectedValue={topic}
+            itemStyle={[styles.pickerItem, { color }]}
             onValueChange={onValueChange}
           >
-            {options.map((option) => (
-              <Picker.Item key={option} label={option} value={option} />
+            {topics.map((t) => (
+              <Picker.Item key={t.key} label={t.key} value={t.key} />
             ))}
           </Picker>
         </View>
@@ -32,14 +33,16 @@ export default function Index() {
         <Text style={styles.yearText}>Year</Text>
       </View>
 
-      <Pulsing>
-        <Button
-          label="Start"
-          onPress={() => {
-            console.log('Start pressed');
-          }}
-        />
-      </Pulsing>
+      <Button
+        label="Start"
+        style={{ backgroundColor: color }}
+        onPress={() => {
+          router.push({
+            pathname: '/[topic]',
+            params: { topic },
+          });
+        }}
+      />
     </SafeAreaView>
   );
 }

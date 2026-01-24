@@ -1,18 +1,21 @@
 import {
   Pressable,
   PressableStateCallbackType,
+  StyleProp,
   StyleSheet,
   Text,
+  ViewStyle,
 } from 'react-native';
 import { flatten } from 'utils/styles';
 
 interface Props {
   label: string;
   onPress: () => void;
+  style?: StyleProp<ViewStyle>;
 }
-export function Button({ label, onPress }: Props) {
+export function Button({ label, onPress, style }: Props) {
   const fStyle = ({ pressed }: PressableStateCallbackType) =>
-    flatten([styles.root, pressed && styles.pressed]);
+    flatten([styles.root, pressed && styles.pressed, style]);
 
   return (
     <Pressable

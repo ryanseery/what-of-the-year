@@ -22,6 +22,7 @@ module.exports = defineConfig([
           pathGroups: [
             { pattern: 'react', group: 'external', position: 'before' },
             { pattern: 'components/**', group: 'internal', position: 'before' },
+            { pattern: 'constants/**', group: 'internal', position: 'before' },
             { pattern: 'hooks/**', group: 'internal', position: 'before' },
             { pattern: 'services/**', group: 'internal', position: 'before' },
             { pattern: 'utils/**', group: 'internal', position: 'before' },
