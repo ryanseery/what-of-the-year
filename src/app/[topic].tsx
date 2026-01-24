@@ -8,11 +8,13 @@ import { getTopic, TOPIC_KEY } from "constants/topics";
 import { useBooks } from "queries/use-books";
 import { useGames } from "queries/use-games";
 import { useMovies } from "queries/use-movies";
+import { createStyles } from "utils/theme";
 
 export default function Topic() {
   const { topic } = useLocalSearchParams<{ topic?: TOPIC_KEY }>();
   const { key } = getTopic(topic);
   const [avatarSeed, setAvatarSeed] = useState("default");
+  const styles = useStyles();
 
   const { data: gData, isLoading: gLoading, error: gError } = useGames(key);
 
@@ -34,10 +36,10 @@ export default function Topic() {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createStyles((theme) => ({
   root: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: theme.colors.background,
     paddingHorizontal: 20,
     justifyContent: "center",
   },
@@ -48,4 +50,4 @@ const styles = StyleSheet.create({
   randomButton: {
     width: 120,
   },
-});
+}));

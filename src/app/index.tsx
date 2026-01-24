@@ -1,31 +1,29 @@
 import { Picker } from "@react-native-picker/picker";
 import { Link } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Button } from "components/button";
-import { getTopic, TOPIC_KEY, topics } from "constants/topics";
-
-const fontColor = "#333";
+import { TOPIC_KEY, topics } from "constants/topics";
+import { createStyles, useTheme } from "utils/theme";
 
 // 1. picker is borked on web
 export default function Index() {
   const [topic, setTopic] = useState<TOPIC_KEY>(TOPIC_KEY.GAMES);
+  const { setTheme } = useTheme();
+  const styles = useStyles();
 
-  const onValueChange = (v: TOPIC_KEY) => setTopic(v);
-
-  const determinedTopic = getTopic(topic);
+  const onValueChange = (v: TOPIC_KEY) => {
+    setTopic(v);
+    setTheme(v);
+  };
 
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.content}>
         <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={topic}
-            itemStyle={[styles.pickerItem, { color: determinedTopic.color }]}
-            onValueChange={onValueChange}
-          >
+          <Picker selectedValue={topic} itemStyle={styles.pickerItem} onValueChange={onValueChange}>
             {topics.map((t) => (
               <Picker.Item key={t.key} label={t.label} value={t.key} />
             ))}
@@ -42,16 +40,16 @@ export default function Index() {
           params: { topic },
         }}
       >
-        <Button label="Start" style={{ backgroundColor: determinedTopic.color }} />
+        <Button label="Start" />
       </Link>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createStyles((theme) => ({
   root: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: theme.colors.background,
     paddingHorizontal: 20,
   },
   content: {
@@ -71,12 +69,12 @@ const styles = StyleSheet.create({
   ofTheText: {
     fontSize: 52,
     fontWeight: "700",
-    color: fontColor,
+    color: theme.colors.text,
     marginVertical: 16,
   },
   yearText: {
     fontSize: 72,
     fontWeight: "bold",
-    color: fontColor,
+    color: theme.colors.text,
   },
-});
+}));

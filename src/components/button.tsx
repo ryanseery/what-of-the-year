@@ -1,18 +1,14 @@
-import {
-  Pressable,
-  PressableProps,
-  PressableStateCallbackType,
-  StyleSheet,
-  Text,
-} from "react-native";
+import { Pressable, PressableProps, PressableStateCallbackType, Text } from "react-native";
 
 import { flatten } from "utils/styles";
+import { createStyles } from "utils/theme";
 
 interface Props extends PressableProps {
   label: string;
 }
 
 export function Button({ label, style, ...pressableProps }: Props) {
+  const styles = useStyles();
   const fStyle = (state: PressableStateCallbackType) => {
     const resolvedStyle = typeof style === "function" ? style(state) : style;
     return flatten([styles.root, resolvedStyle, state.pressed && styles.pressed]);
@@ -30,10 +26,10 @@ export function Button({ label, style, ...pressableProps }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createStyles((theme) => ({
   root: {
     width: "100%",
-    backgroundColor: "#111",
+    backgroundColor: theme.colors.primary,
     borderRadius: 16,
     paddingVertical: 16,
     alignItems: "center",
@@ -46,4 +42,4 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.7,
   },
-});
+}));
