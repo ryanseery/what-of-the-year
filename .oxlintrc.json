@@ -1,0 +1,8 @@
+{
+  "rules": {
+    "react/jsx-key": "error",
+    "react/no-children-prop": "error",
+    "react-perf/jsx-no-new-object-as-prop": "off",
+    "typescript/no-explicit-any": "error"
+  }
+}
