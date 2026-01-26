@@ -1,26 +1,20 @@
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
 import { Avatar } from "components/avatar";
 import { Button } from "components/button";
 import { getTopic, TOPIC_KEY } from "constants/topics";
-import { useBooks } from "queries/use-books";
-import { useGames } from "queries/use-games";
-import { useMovies } from "queries/use-movies";
+import { useTopicData } from "queries/use-topic-data";
 import { createStyles } from "utils/theme";
 
 export default function Topic() {
+  const [avatarSeed, setAvatarSeed] = useState("default");
   const { topic } = useLocalSearchParams<{ topic?: TOPIC_KEY }>();
   const { key } = getTopic(topic);
-  const [avatarSeed, setAvatarSeed] = useState("default");
   const styles = useStyles();
 
-  const { data: gData, isLoading: gLoading, error: gError } = useGames(key);
-
-  const { data: mData, isLoading: mLoading, error: mError } = useMovies(key);
-
-  const { data: bData, isLoading: bLoading, error: bError } = useBooks(key);
+  const { data, isLoading, error } = useTopicData(key);
 
   const randomizeAvatar = () => {
     setAvatarSeed(Math.random().toString(36).substring(7));

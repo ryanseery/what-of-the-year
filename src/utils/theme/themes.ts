@@ -44,27 +44,38 @@ const baseColors = {
   success: "#16A34A",
 };
 
-export const gamesTheme: Theme = {
-  colors: {
-    primary: "#000000",
-    ...baseColors,
-  },
+const baseCollections = {
   spacing: baseSpacing,
   borderRadius: baseBorderRadius,
   typography: baseTypography,
 };
 
+export const gamesTheme: Theme = {
+  ...baseCollections,
+  colors: {
+    primary: "#000000",
+    ...baseColors,
+  },
+};
+
 export const moviesTheme: Theme = {
+  ...baseCollections,
   colors: {
     primary: "#3B82F6",
     ...baseColors,
   },
-  spacing: baseSpacing,
-  borderRadius: baseBorderRadius,
-  typography: baseTypography,
+};
+
+export const booksTheme: Theme = {
+  ...baseCollections,
+  colors: {
+    primary: "green",
+    ...baseColors,
+  },
 };
 
 export const themes = {
   games: gamesTheme,
   movies: moviesTheme,
+  books: booksTheme,
 };

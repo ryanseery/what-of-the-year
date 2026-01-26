@@ -44,4 +44,4 @@ export interface Theme {
   };
 }
 
-export type ThemeName = TOPIC_KEY.GAMES | TOPIC_KEY.MOVIES;
+export type ThemeName = TOPIC_KEY.GAMES | TOPIC_KEY.MOVIES | TOPIC_KEY.BOOKS;
