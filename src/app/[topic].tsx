@@ -16,6 +16,8 @@ export default function Topic() {
 
   const { data, isLoading, error } = useTopicData(key);
 
+  const source = `https://api.dicebear.com/7.x/bottts/svg?seed=${avatarSeed}`;
+
   const randomizeAvatar = () => {
     setAvatarSeed(Math.random().toString(36).substring(7));
   };
@@ -23,7 +25,7 @@ export default function Topic() {
   return (
     <View style={styles.root}>
       <View style={styles.avatarContainer}>
-        <Avatar seed={avatarSeed} size={120} />
+        <Avatar source={source} size={120} />
         <Button label="Random" onPress={randomizeAvatar} style={styles.randomButton} />
       </View>
     </View>
