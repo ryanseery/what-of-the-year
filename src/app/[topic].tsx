@@ -1,15 +1,17 @@
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { View } from "react-native";
+import { KeyboardAvoidingView, Platform, TextInput, View } from "react-native";
 
 import { Avatar } from "components/avatar";
 import { Button } from "components/button";
+import { Input } from "components/input";
 import { getTopic, TOPIC_KEY } from "constants/topics";
 import { useTopicData } from "queries/use-topic-data";
 import { createStyles } from "utils/theme";
 
 export default function Topic() {
   const [avatarSeed, setAvatarSeed] = useState("default");
+  const [name, setName] = useState("");
   const { topic } = useLocalSearchParams<{ topic?: TOPIC_KEY }>();
   const { key } = getTopic(topic);
   const styles = useStyles();
@@ -23,12 +25,20 @@ export default function Topic() {
   };
 
   return (
-    <View style={styles.root}>
+    <KeyboardAvoidingView
+      style={styles.root}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
       <View style={styles.avatarContainer}>
         <Avatar source={source} size={120} />
         <Button label="Random" onPress={randomizeAvatar} style={styles.randomButton} />
+        <Input
+          placeholder="User name"
+          value={name}
+          onChangeText={(text: string) => setName(text)}
+        />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

@@ -65,6 +65,7 @@ const useStyles = createStyles((theme) => ({
     fontSize: 72,
     fontWeight: "bold",
     height: 88,
+    color: theme.colors.primary,
   },
   ofTheText: {
     fontSize: 52,
