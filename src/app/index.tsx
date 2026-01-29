@@ -1,10 +1,10 @@
-import { Picker } from "@react-native-picker/picker";
 import { Link } from "expo-router";
 import { useState } from "react";
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Button } from "components/button";
+import { Picker } from "components/picker";
 import { TOPIC_KEY, topics } from "constants/topics";
 import { createStyles, useTheme } from "utils/theme";
 
@@ -22,13 +22,7 @@ export default function Index() {
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.content}>
-        <View style={styles.pickerContainer}>
-          <Picker selectedValue={topic} itemStyle={styles.pickerItem} onValueChange={onValueChange}>
-            {topics.map((t) => (
-              <Picker.Item key={t.key} label={t.label} value={t.key} />
-            ))}
-          </Picker>
-        </View>
+        <Picker topics={topics} topic={topic} onValueChange={onValueChange} />
         <Text style={styles.ofTheText}>of the</Text>
         <Text style={styles.yearText}>Year</Text>
       </View>
@@ -50,22 +44,12 @@ const useStyles = createStyles((t) => ({
   root: {
     flex: 1,
     backgroundColor: t.colors.background,
-    paddingHorizontal: t.spacing.lg,
+    padding: t.spacing.lg,
   },
   content: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-  },
-  pickerContainer: {
-    width: "100%",
-    overflow: "hidden",
-  },
-  pickerItem: {
-    fontSize: 72,
-    fontWeight: t.text.weight.bold,
-    color: t.colors.primary,
-    height: 88,
   },
   ofTheText: {
     fontSize: 52,

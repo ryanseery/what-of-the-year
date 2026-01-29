@@ -4,6 +4,12 @@ export enum TOPIC_KEY {
   BOOKS = "books",
 }
 
+export type Topics = {
+  key: TOPIC_KEY;
+  label: string;
+  color: string;
+};
+
 export const topics = [
   { key: TOPIC_KEY.GAMES, label: "Game", color: "black" },
   { key: TOPIC_KEY.MOVIES, label: "Movie", color: "blue" },

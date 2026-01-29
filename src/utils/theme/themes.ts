@@ -43,6 +43,7 @@ const baseText = {
 const baseColors = {
   secondary: "#666666",
   background: "#FFFFFF",
+  backgroundSecondary: "#F0F0F0",
   surface: "#F5F5F5",
   error: "#DC2626",
   success: "#16A34A",
