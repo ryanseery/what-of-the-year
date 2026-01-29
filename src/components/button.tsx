@@ -26,18 +26,18 @@ export function Button({ label, style, ...pressableProps }: Props) {
   );
 }
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((t) => ({
   root: {
     width: "100%",
-    backgroundColor: theme.colors.primary,
-    borderRadius: 16,
-    paddingVertical: 16,
     alignItems: "center",
+    backgroundColor: t.colors.primary,
+    borderRadius: t.border.radius.lg,
+    paddingVertical: t.spacing.md,
   },
   text: {
     color: "#fff",
-    fontSize: 22,
-    fontWeight: "800",
+    fontSize: t.text.size.xl,
+    fontWeight: t.text.weight.bold,
   },
   pressed: {
     opacity: 0.7,

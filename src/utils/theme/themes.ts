@@ -1,23 +1,30 @@
 import type { Theme } from "./types";
 
 const baseSpacing = {
-  xs: 4,
   sm: 8,
   md: 16,
   lg: 24,
-  xl: 32,
-  xxl: 48,
 };
 
-const baseBorderRadius = {
-  sm: 4,
-  md: 8,
-  lg: 12,
-  xl: 16,
+const baseBorder = {
+  size: {
+    sm: 0.5,
+    md: 1,
+    lg: 1.5,
+  },
+  radius: {
+    sm: 4,
+    md: 8,
+    lg: 12,
+  },
 };
 
-const baseTypography = {
-  fontSize: {
+const baseText = {
+  color: {
+    primary: "#000000",
+    secondary: "#666666",
+  },
+  size: {
     xs: 12,
     sm: 14,
     md: 16,
@@ -25,7 +32,7 @@ const baseTypography = {
     xl: 24,
     xxl: 32,
   },
-  fontWeight: {
+  weight: {
     regular: "400" as const,
     medium: "500" as const,
     semibold: "600" as const,
@@ -37,17 +44,14 @@ const baseColors = {
   secondary: "#666666",
   background: "#FFFFFF",
   surface: "#F5F5F5",
-  text: "#000000",
-  textSecondary: "#666666",
-  border: "#E0E0E0",
   error: "#DC2626",
   success: "#16A34A",
 };
 
 const baseCollections = {
   spacing: baseSpacing,
-  borderRadius: baseBorderRadius,
-  typography: baseTypography,
+  border: baseBorder,
+  text: baseText,
 };
 
 export const gamesTheme: Theme = {

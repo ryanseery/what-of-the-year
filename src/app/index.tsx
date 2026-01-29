@@ -46,11 +46,11 @@ export default function Index() {
   );
 }
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((t) => ({
   root: {
     flex: 1,
-    backgroundColor: theme.colors.background,
-    paddingHorizontal: 20,
+    backgroundColor: t.colors.background,
+    paddingHorizontal: t.spacing.lg,
   },
   content: {
     flex: 1,
@@ -63,19 +63,19 @@ const useStyles = createStyles((theme) => ({
   },
   pickerItem: {
     fontSize: 72,
-    fontWeight: "bold",
+    fontWeight: t.text.weight.bold,
+    color: t.colors.primary,
     height: 88,
-    color: theme.colors.primary,
   },
   ofTheText: {
     fontSize: 52,
-    fontWeight: "700",
-    color: theme.colors.text,
-    marginVertical: 16,
+    fontWeight: t.text.weight.bold,
+    color: t.text.color.primary,
+    marginVertical: t.spacing.md,
   },
   yearText: {
     fontSize: 72,
-    fontWeight: "bold",
-    color: theme.colors.text,
+    fontWeight: t.text.weight.bold,
+    color: t.text.color.primary,
   },
 }));

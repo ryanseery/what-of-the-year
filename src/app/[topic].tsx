@@ -42,16 +42,16 @@ export default function Topic() {
   );
 }
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((t) => ({
   root: {
     flex: 1,
-    backgroundColor: theme.colors.background,
-    paddingHorizontal: 20,
     justifyContent: "center",
+    backgroundColor: t.colors.background,
+    paddingHorizontal: t.spacing.md,
   },
   avatarContainer: {
     alignItems: "center",
-    gap: 16,
+    gap: t.spacing.sm,
   },
   randomButton: {
     width: 120,

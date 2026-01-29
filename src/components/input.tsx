@@ -24,15 +24,15 @@ const useStyles = createStyles((theme) => ({
   root: {
     width: "100%",
     backgroundColor: theme.colors.surface,
-    borderWidth: 1,
+    borderWidth: theme.border.size.md,
     borderColor: theme.colors.primary,
-    borderRadius: theme.borderRadius.md,
+    borderRadius: theme.border.radius.md,
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
-    fontSize: theme.typography.fontSize.md,
+    fontSize: theme.text.size.md,
     color: theme.colors.primary,
   },
   placeholder: {
-    color: theme.colors.textSecondary,
+    color: theme.text.color.secondary,
   },
 }));

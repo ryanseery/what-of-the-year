@@ -17,10 +17,10 @@ export function Avatar({ source, size = 100 }: Props) {
   );
 }
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((t) => ({
   root: {
     overflow: "hidden",
-    backgroundColor: theme.colors.surface,
+    backgroundColor: t.colors.surface,
   },
   image: {
     width: "100%",
