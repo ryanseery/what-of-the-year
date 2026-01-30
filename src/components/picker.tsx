@@ -13,8 +13,6 @@ import { TOPIC_KEY, Topics } from "constants/topics";
 import { createStyles, useTheme } from "utils/theme";
 
 const ITEM_HEIGHT = 88;
-const VISIBLE_ITEMS = 3;
-const CONTAINER_HEIGHT = ITEM_HEIGHT * VISIBLE_ITEMS;
 
 interface Props {
   topics: Topics[];
@@ -28,7 +26,6 @@ export function Picker({ topics, topic, onValueChange }: Props) {
   const scrollY = useRef(new Animated.Value(0)).current;
   const scrollViewRef = useRef<ScrollView>(null);
 
-  // Scroll to selected item on mount and when topic changes externally
   useEffect(() => {
     const index = topics.findIndex((t) => t.key === topic);
     if (index >= 0) {
@@ -52,6 +49,10 @@ export function Picker({ topics, topic, onValueChange }: Props) {
     [topics, topic, onValueChange],
   );
 
+  const onScroll = Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+    useNativeDriver: Platform.OS !== "web",
+  });
+
   return (
     <View style={styles.root}>
       <View style={styles.scrollWrapper}>
@@ -60,9 +61,7 @@ export function Picker({ topics, topic, onValueChange }: Props) {
           showsVerticalScrollIndicator={false}
           snapToInterval={ITEM_HEIGHT}
           decelerationRate="fast"
-          onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
-            useNativeDriver: Platform.OS !== "web",
-          })}
+          onScroll={onScroll}
           scrollEventThrottle={16}
           onMomentumScrollEnd={handleScrollEnd}
           onScrollEndDrag={handleScrollEnd}
@@ -125,15 +124,14 @@ export function Picker({ topics, topic, onValueChange }: Props) {
 
 const useStyles = createStyles((t) => ({
   root: {
-    height: CONTAINER_HEIGHT,
     width: "100%",
   },
   scrollWrapper: {
-    height: CONTAINER_HEIGHT,
+    height: 200,
     overflow: "hidden",
   },
   scrollContent: {
-    paddingVertical: ITEM_HEIGHT, // Center first/last items
+    paddingVertical: ITEM_HEIGHT,
   },
   item: {
     height: ITEM_HEIGHT,

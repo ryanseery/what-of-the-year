@@ -8,7 +8,6 @@ import { Picker } from "components/picker";
 import { TOPIC_KEY, topics } from "constants/topics";
 import { createStyles, useTheme } from "utils/theme";
 
-// 1. picker is borked on web
 export default function Index() {
   const [topic, setTopic] = useState<TOPIC_KEY>(TOPIC_KEY.GAMES);
   const { setTheme } = useTheme();
