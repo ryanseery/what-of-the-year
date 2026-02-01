@@ -22,8 +22,9 @@ export default function RootLayout() {
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="index" />
             <Stack.Screen
-              name="[topic]"
+              name="[topic]/index"
               options={({ route }) => {
+                console.log("HERE: ", route);
                 const params = route.params as { topic?: string } | undefined;
                 const label = getTopic(params?.topic as TOPIC_KEY).label;
                 return {
@@ -34,6 +35,7 @@ export default function RootLayout() {
                 };
               }}
             />
+            <Stack.Screen name="[topic]/[table]/[id]" />
           </Stack>
         </WebContainer>
       </ThemeProvider>

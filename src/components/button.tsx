@@ -35,6 +35,7 @@ export function Button({ label, style, disabled, ...props }: Props) {
 const useStyles = createStyles((t) => ({
   root: {
     width: "100%",
+
     alignItems: "center",
     backgroundColor: t.colors.primary,
     borderRadius: t.border.radius.lg,

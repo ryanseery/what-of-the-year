@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { KeyboardAvoidingView, Platform, TextInput, View } from "react-native";
 
@@ -35,15 +35,26 @@ export default function Topic() {
       style={styles.root}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View style={styles.avatarContainer}>
-        <Avatar source={source} size={120} />
-        <Button label="Random" onPress={randomizeAvatar} style={styles.btn} />
+      <View style={styles.container}>
+        <View style={styles.avatar}>
+          <Avatar source={source} size={120} />
+          <Button label="Random" onPress={randomizeAvatar} style={styles.btn} />
+        </View>
         <Input
           placeholder="User name"
           value={name}
           onChangeText={(text: string) => setName(text)}
         />
-        <Button label="Start" disabled={disabled} onPress={onSubmit} style={styles.btn} />
+        <Link
+          disabled={disabled}
+          asChild
+          href={{
+            pathname: "/[topic]/[table]/[id]",
+            params: { topic: key, table: "test", id: "123" },
+          }}
+        >
+          <Button label="Start" disabled={disabled} onPress={onSubmit} />
+        </Link>
       </View>
     </KeyboardAvoidingView>
   );
@@ -56,9 +67,15 @@ const useStyles = createStyles((t) => ({
     backgroundColor: t.colors.background,
     paddingHorizontal: t.spacing.md,
   },
-  avatarContainer: {
+  container: {
     alignItems: "center",
     gap: t.spacing.lg,
+  },
+  avatar: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   btn: {
     width: 120,
