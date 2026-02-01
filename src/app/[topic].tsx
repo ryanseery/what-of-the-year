@@ -20,8 +20,14 @@ export default function Topic() {
 
   const source = `https://api.dicebear.com/7.x/bottts/svg?seed=${avatarSeed}`;
 
+  const disabled = name.length < 1;
+
   const randomizeAvatar = () => {
     setAvatarSeed(Math.random().toString(36).substring(7));
+  };
+
+  const onSubmit = () => {
+    // handle table creation
   };
 
   return (
@@ -31,12 +37,13 @@ export default function Topic() {
     >
       <View style={styles.avatarContainer}>
         <Avatar source={source} size={120} />
-        <Button label="Random" onPress={randomizeAvatar} style={styles.randomButton} />
+        <Button label="Random" onPress={randomizeAvatar} style={styles.btn} />
         <Input
           placeholder="User name"
           value={name}
           onChangeText={(text: string) => setName(text)}
         />
+        <Button label="Start" disabled={disabled} onPress={onSubmit} style={styles.btn} />
       </View>
     </KeyboardAvoidingView>
   );
@@ -51,9 +58,9 @@ const useStyles = createStyles((t) => ({
   },
   avatarContainer: {
     alignItems: "center",
-    gap: t.spacing.sm,
+    gap: t.spacing.lg,
   },
-  randomButton: {
+  btn: {
     width: 120,
   },
 }));

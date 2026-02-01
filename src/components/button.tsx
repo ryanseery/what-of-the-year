@@ -7,11 +7,16 @@ interface Props extends PressableProps {
   label: string;
 }
 
-export function Button({ label, style, ...pressableProps }: Props) {
+export function Button({ label, style, disabled, ...props }: Props) {
   const styles = useStyles();
   const fStyle = (state: PressableStateCallbackType) => {
     const resolvedStyle = typeof style === "function" ? style(state) : style;
-    return flatten([styles.root, resolvedStyle, state.pressed && styles.pressed]);
+    return flatten([
+      styles.root,
+      resolvedStyle,
+      !disabled && state.pressed && styles.pressed,
+      disabled && styles.disabled,
+    ]);
   };
 
   return (
@@ -19,7 +24,8 @@ export function Button({ label, style, ...pressableProps }: Props) {
       accessibilityRole="button"
       accessibilityLabel={label}
       style={fStyle}
-      {...pressableProps}
+      disabled={disabled}
+      {...props}
     >
       <Text style={styles.text}>{label}</Text>
     </Pressable>
@@ -41,5 +47,8 @@ const useStyles = createStyles((t) => ({
   },
   pressed: {
     opacity: 0.7,
+  },
+  disabled: {
+    opacity: 0.5,
   },
 }));
