@@ -30,7 +30,7 @@ const useStyles = createStyles((theme) => ({
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
     fontSize: theme.text.size.md,
-    color: theme.colors.primary,
+    color: theme.text.color.primary,
   },
   placeholder: {
     color: theme.text.color.secondary,

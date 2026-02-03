@@ -1,22 +1,22 @@
-import { Link, useLocalSearchParams } from "expo-router";
+import { Link } from "expo-router";
 import { useState } from "react";
-import { KeyboardAvoidingView, Platform, TextInput, View } from "react-native";
+import { Platform, View } from "react-native";
 
 import { Avatar } from "components/avatar";
 import { Button } from "components/button";
 import { Input } from "components/input";
-import { getTopic, TOPIC_KEY } from "constants/topics";
+import { KeyboardAvoidingView } from "components/keyboard-avoiding-view";
+import { useTopic } from "hooks/use-topic";
 import { useTopicData } from "queries/use-topic-data";
 import { createStyles } from "utils/theme";
 
 export default function Topic() {
   const [avatarSeed, setAvatarSeed] = useState("default");
   const [name, setName] = useState("");
-  const { topic } = useLocalSearchParams<{ topic?: TOPIC_KEY }>();
-  const { key } = getTopic(topic);
+  const topic = useTopic();
   const styles = useStyles();
 
-  const { data, isLoading, error } = useTopicData(key);
+  const { data, isLoading, error } = useTopicData(topic.key);
 
   const source = `https://api.dicebear.com/7.x/bottts/svg?seed=${avatarSeed}`;
 
@@ -28,6 +28,7 @@ export default function Topic() {
 
   const onSubmit = () => {
     // handle table creation
+    console.log("onSubmit");
   };
 
   return (
@@ -49,8 +50,8 @@ export default function Topic() {
           disabled={disabled}
           asChild
           href={{
-            pathname: "/[topic]/[table]/[id]",
-            params: { topic: key, table: "test", id: "123" },
+            pathname: "/[topic]/[table]/[step]",
+            params: { topic: topic.label, table: "test", step: "1" },
           }}
         >
           <Button label="Start" disabled={disabled} onPress={onSubmit} />
