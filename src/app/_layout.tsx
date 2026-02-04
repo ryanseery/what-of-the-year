@@ -5,16 +5,18 @@ import { WebContainer } from "components/web-container";
 import { getTopic, TOPIC_KEY } from "constants/topics";
 import { ThemeProvider } from "utils/theme";
 
+const STALE_TIME = 1000 * 60 * 5; // 5 minutes
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 2,
-      staleTime: 1000 * 60 * 5, // 5 minutes
+      staleTime: STALE_TIME,
     },
   },
 });
 
-export default function RootLayout() {
+export default function Root() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
@@ -22,7 +24,7 @@ export default function RootLayout() {
           <Stack
             screenOptions={{ headerBackButtonDisplayMode: "minimal", headerShadowVisible: false }}
           >
-            <Stack.Screen options={{ headerShown: false }} name="index" />
+            <Stack.Screen name="index" options={{ headerShown: false }} />
             <Stack.Screen
               name="[topic]/index"
               options={({ route }) => {
@@ -33,7 +35,17 @@ export default function RootLayout() {
                 };
               }}
             />
-            <Stack.Screen name="[topic]/[table]/[step]" />
+            <Stack.Screen
+              name="[topic]/[table]/[step]"
+              options={({ route }) => {
+                const params = route.params as
+                  | { topic?: string; table: string; step: string }
+                  | undefined;
+                return {
+                  title: `Round ${params?.step}`,
+                };
+              }}
+            />
           </Stack>
         </WebContainer>
       </ThemeProvider>

@@ -3,7 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { createStyles } from "utils/theme";
 
-export default function Index() {
+export default function Step() {
   const s = useStyles();
 
   return (
@@ -17,6 +17,6 @@ const useStyles = createStyles((t) => ({
   root: {
     flex: 1,
     backgroundColor: t.colors.background,
-    padding: t.spacing.lg,
+    paddingHorizontal: t.spacing.lg,
   },
 }));

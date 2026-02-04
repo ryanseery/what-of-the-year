@@ -2,7 +2,7 @@ import { Picker as RNPicker } from "@react-native-picker/picker";
 import { View } from "react-native";
 
 import { TOPIC_KEY, Topics } from "constants/topics";
-import { useTheme } from "utils/theme";
+import { createStyles } from "utils/theme";
 
 interface Props {
   topics: Topics[];
@@ -10,10 +10,7 @@ interface Props {
   onValueChange: (v: TOPIC_KEY) => void;
 }
 
-import { createStyles } from "utils/theme";
-
 export function Picker({ topics, topic, onValueChange }: Props) {
-  const { theme } = useTheme();
   const s = useStyles();
 
   return (
@@ -25,12 +22,7 @@ export function Picker({ topics, topic, onValueChange }: Props) {
         itemStyle={s.item}
       >
         {topics.map((t) => (
-          <RNPicker.Item
-            key={t.key}
-            label={t.label}
-            value={t.key}
-            color={t.key === topic ? theme.colors.primary : theme.colors.secondary}
-          />
+          <RNPicker.Item key={t.key} label={t.label} value={t.key} />
         ))}
       </RNPicker>
     </View>
@@ -58,5 +50,6 @@ const useStyles = createStyles((t) => ({
     width: "100%",
     height: 120,
     backgroundColor: t.colors.background,
+    color: t.colors.primary,
   },
 }));

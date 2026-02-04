@@ -1,6 +1,6 @@
 import { Link } from "expo-router";
 import { useState } from "react";
-import { Platform, View } from "react-native";
+import { View } from "react-native";
 
 import { Avatar } from "components/avatar";
 import { Button } from "components/button";
@@ -48,7 +48,7 @@ export default function Topic() {
           asChild
           href={{
             pathname: "/[topic]/[table]/[step]",
-            params: { topic: topic.label, table: "test", step: "1" },
+            params: { topic: topic.label, table: "test", step: 10 },
           }}
         >
           <Button label="Start" disabled={disabled} onPress={onSubmit} />
