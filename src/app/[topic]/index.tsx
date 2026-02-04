@@ -14,7 +14,7 @@ export default function Topic() {
   const [avatarSeed, setAvatarSeed] = useState("default");
   const [name, setName] = useState("");
   const topic = useTopic();
-  const styles = useStyles();
+  const s = useStyles();
 
   const { data, isLoading, error } = useTopicData(topic.key);
 
@@ -32,14 +32,11 @@ export default function Topic() {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.root}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <View style={styles.container}>
-        <View style={styles.avatar}>
+    <KeyboardAvoidingView style={s.root}>
+      <View style={s.container}>
+        <View style={s.avatar}>
           <Avatar source={source} size={120} />
-          <Button label="Random" onPress={randomizeAvatar} style={styles.btn} />
+          <Button style={s.btn} label="Random" onPress={randomizeAvatar} />
         </View>
         <Input
           placeholder="User name"

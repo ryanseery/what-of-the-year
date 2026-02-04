@@ -11,7 +11,7 @@ import { createStyles, useTheme } from "utils/theme";
 export default function Index() {
   const [topic, setTopic] = useState<TOPIC_KEY>(TOPIC_KEY.GAMES);
   const { setTheme } = useTheme();
-  const styles = useStyles();
+  const s = useStyles();
 
   const onValueChange = (v: TOPIC_KEY) => {
     setTopic(v);
@@ -19,11 +19,11 @@ export default function Index() {
   };
 
   return (
-    <SafeAreaView style={styles.root}>
-      <View style={styles.content}>
+    <SafeAreaView style={s.root}>
+      <View style={s.content}>
         <Picker topics={topics} topic={topic} onValueChange={onValueChange} />
-        <Text style={styles.ofTheText}>of the</Text>
-        <Text style={styles.yearText}>Year</Text>
+        <Text style={s.ofTheText}>of the</Text>
+        <Text style={s.yearText}>Year</Text>
       </View>
 
       <Link

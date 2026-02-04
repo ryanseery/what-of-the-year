@@ -19,7 +19,9 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <WebContainer>
-          <Stack screenOptions={{ headerBackButtonDisplayMode: "minimal" }}>
+          <Stack
+            screenOptions={{ headerBackButtonDisplayMode: "minimal", headerShadowVisible: false }}
+          >
             <Stack.Screen options={{ headerShown: false }} name="index" />
             <Stack.Screen
               name="[topic]/index"
@@ -27,10 +29,7 @@ export default function RootLayout() {
                 const params = route.params as { topic?: string } | undefined;
                 const label = getTopic(params?.topic as TOPIC_KEY).label;
                 return {
-                  // headerShown: true,
                   title: `${label} of the Year`,
-
-                  headerShadowVisible: false,
                 };
               }}
             />

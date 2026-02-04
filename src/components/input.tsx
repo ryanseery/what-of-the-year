@@ -8,31 +8,31 @@ interface Props {
   placeholder?: string;
 }
 export function Input({ value, onChangeText, placeholder }: Props) {
-  const styles = useStyles();
+  const s = useStyles();
   return (
     <TextInput
-      style={styles.root}
+      style={s.root}
       value={value}
       onChangeText={onChangeText}
       placeholder={placeholder}
-      placeholderTextColor={styles.placeholder.color}
+      placeholderTextColor={s.placeholder.color}
     />
   );
 }
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((t) => ({
   root: {
     width: "100%",
-    backgroundColor: theme.colors.surface,
-    borderWidth: theme.border.size.md,
-    borderColor: theme.colors.primary,
-    borderRadius: theme.border.radius.md,
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
-    fontSize: theme.text.size.md,
-    color: theme.text.color.primary,
+    backgroundColor: t.colors.surface,
+    borderWidth: t.border.size.md,
+    borderColor: t.colors.primary,
+    borderRadius: t.border.radius.md,
+    paddingHorizontal: t.spacing.md,
+    paddingVertical: t.spacing.sm,
+    fontSize: t.text.size.md,
+    color: t.text.color.primary,
   },
   placeholder: {
-    color: theme.text.color.secondary,
+    color: t.text.color.secondary,
   },
 }));

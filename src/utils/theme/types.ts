@@ -47,6 +47,12 @@ export interface Theme {
       bold: "700";
     };
   };
+  shadow: {
+    shadowColor: string;
+    shadowOffset: { width: number; height: number };
+    shadowOpacity: number;
+    shadowRadius: number;
+  };
 }
 
 export type ThemeName = TOPIC_KEY.GAMES | TOPIC_KEY.MOVIES | TOPIC_KEY.BOOKS;

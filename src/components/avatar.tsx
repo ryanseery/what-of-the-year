@@ -9,10 +9,10 @@ interface Props {
 }
 
 export function Avatar({ source, size = 100 }: Props) {
-  const styles = useStyles();
+  const s = useStyles();
   return (
-    <View style={[styles.root, { width: size, height: size, borderRadius: size / 2 }]}>
-      <Image source={{ uri: source }} style={styles.image} contentFit="cover" transition={200} />
+    <View style={[s.root, { width: size, height: size, borderRadius: size / 2 }]}>
+      <Image source={{ uri: source }} style={s.image} contentFit="cover" transition={200} />
     </View>
   );
 }

@@ -8,14 +8,14 @@ interface Props extends PressableProps {
 }
 
 export function Button({ label, style, disabled, ...props }: Props) {
-  const styles = useStyles();
+  const s = useStyles();
   const fStyle = (state: PressableStateCallbackType) => {
     const resolvedStyle = typeof style === "function" ? style(state) : style;
     return flatten([
-      styles.root,
+      s.root,
       resolvedStyle,
-      !disabled && state.pressed && styles.pressed,
-      disabled && styles.disabled,
+      !disabled && state.pressed && s.pressed,
+      disabled && s.disabled,
     ]);
   };
 
@@ -27,7 +27,7 @@ export function Button({ label, style, disabled, ...props }: Props) {
       disabled={disabled}
       {...props}
     >
-      <Text style={styles.text}>{label}</Text>
+      <Text style={s.text}>{label}</Text>
     </Pressable>
   );
 }

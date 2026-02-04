@@ -4,11 +4,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { createStyles } from "utils/theme";
 
 export default function Index() {
-  const styles = useStyles();
+  const s = useStyles();
 
   return (
-    <SafeAreaView style={styles.root}>
-      <Text>GAME</Text>
+    <SafeAreaView style={s.root}>
+      <Text>What of the Year</Text>
     </SafeAreaView>
   );
 }

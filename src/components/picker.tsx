@@ -14,15 +14,15 @@ import { createStyles } from "utils/theme";
 
 export function Picker({ topics, topic, onValueChange }: Props) {
   const { theme } = useTheme();
-  const styles = useStyles();
+  const s = useStyles();
 
   return (
-    <View style={styles.root}>
+    <View style={s.root}>
       <RNPicker
         selectedValue={topic}
         onValueChange={onValueChange}
-        style={styles.picker}
-        itemStyle={styles.item}
+        style={s.picker}
+        itemStyle={s.item}
       >
         {topics.map((t) => (
           <RNPicker.Item
