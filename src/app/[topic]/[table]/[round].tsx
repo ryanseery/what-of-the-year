@@ -8,7 +8,7 @@ export default function Step() {
 
   return (
     <SafeAreaView style={s.root}>
-      <Text>STEP</Text>
+      <Text>Round</Text>
     </SafeAreaView>
   );
 }

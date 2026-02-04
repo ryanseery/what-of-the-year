@@ -42,7 +42,7 @@ const useStyles = createStyles((t) => ({
     paddingVertical: t.spacing.md,
   },
   text: {
-    color: t.text.color.secondary,
+    color: "#fff",
     fontSize: t.text.size.xl,
     fontWeight: t.text.weight.bold,
   },

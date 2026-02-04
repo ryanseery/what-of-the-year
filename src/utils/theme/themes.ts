@@ -22,7 +22,7 @@ const baseBorder = {
 const baseText = {
   color: {
     primary: "#000000",
-    secondary: "#fff",
+    secondary: "#666666",
   },
   size: {
     xs: 12,

@@ -47,8 +47,8 @@ export default function Topic() {
           disabled={disabled}
           asChild
           href={{
-            pathname: "/[topic]/[table]/[step]",
-            params: { topic: topic.label, table: "test", step: 10 },
+            pathname: "/[topic]/[table]/[round]",
+            params: { topic: topic.label, table: "test", round: 10 },
           }}
         >
           <Button label="Start" disabled={disabled} onPress={onSubmit} />

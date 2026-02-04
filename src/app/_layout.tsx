@@ -35,13 +35,13 @@ export default function Root() {
               }}
             />
             <Stack.Screen
-              name="[topic]/[table]/[step]"
+              name="[topic]/[table]/[round]"
               options={({ route }) => {
                 const params = route.params as
-                  | { topic?: string; table: string; step: string }
+                  | { topic?: string; table: string; round: string }
                   | undefined;
                 return {
-                  title: `Round ${params?.step}`,
+                  title: `Round ${params?.round}`,
                 };
               }}
             />
