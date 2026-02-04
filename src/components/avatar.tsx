@@ -12,7 +12,7 @@ export function Avatar({ source, size = 100 }: Props) {
   const s = useStyles();
   return (
     <View style={[s.root, { width: size, height: size, borderRadius: size / 2 }]}>
-      <Image source={{ uri: source }} style={s.image} contentFit="cover" transition={200} />
+      <Image style={s.image} source={{ uri: source }} contentFit="cover" transition={200} />
     </View>
   );
 }

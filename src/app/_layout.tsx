@@ -3,9 +3,8 @@ import { Stack } from "expo-router";
 
 import { WebContainer } from "components/web-container";
 import { getTopic, TOPIC_KEY } from "constants/topics";
+import { STALE_TIME } from "queries/utils";
 import { ThemeProvider } from "utils/theme";
-
-const STALE_TIME = 1000 * 60 * 5; // 5 minutes
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -22,7 +22,7 @@ const baseBorder = {
 const baseText = {
   color: {
     primary: "#000000",
-    secondary: "#666666",
+    secondary: "#fff",
   },
   size: {
     xs: 12,
@@ -42,7 +42,7 @@ const baseText = {
 
 const baseColors = {
   secondary: "#666666",
-  background: "#FFFFFF",
+  background: "#fff",
   backgroundSecondary: "#F0F0F0",
   surface: "#F5F5F5",
   error: "#DC2626",
@@ -80,7 +80,7 @@ export const moviesTheme: Theme = {
 export const booksTheme: Theme = {
   ...baseCollections,
   colors: {
-    primary: "green",
+    primary: "#3bf673",
     ...baseColors,
   },
 };

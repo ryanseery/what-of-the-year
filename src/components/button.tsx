@@ -7,6 +7,7 @@ interface Props extends PressableProps {
   label: string;
 }
 
+// focus
 export function Button({ label, style, disabled, ...props }: Props) {
   const s = useStyles();
   const fStyle = (state: PressableStateCallbackType) => {
@@ -35,14 +36,13 @@ export function Button({ label, style, disabled, ...props }: Props) {
 const useStyles = createStyles((t) => ({
   root: {
     width: "100%",
-
     alignItems: "center",
     backgroundColor: t.colors.primary,
     borderRadius: t.border.radius.lg,
     paddingVertical: t.spacing.md,
   },
   text: {
-    color: "#fff",
+    color: t.text.color.secondary,
     fontSize: t.text.size.xl,
     fontWeight: t.text.weight.bold,
   },
