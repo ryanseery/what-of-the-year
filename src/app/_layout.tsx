@@ -33,7 +33,7 @@ export default function RootLayout() {
                 };
               }}
             />
-            <Stack.Screen name="[topic]/[table]/[id]" />
+            <Stack.Screen name="[topic]/[table]/[step]" />
           </Stack>
         </WebContainer>
       </ThemeProvider>
