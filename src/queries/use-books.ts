@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { handleError, STALE_TIME } from "./utils";
 import { TOPIC_KEY } from "constants/topics";
 import type { Option } from "types/option";
+import { QUERY_ARGS } from "types/query-args";
 import { currentYear } from "utils/dates";
 
 const GOOGLE_BOOKS_API_URL = process.env.EXPO_PUBLIC_GOOGLE_BOOKS_API_URL;
@@ -38,8 +39,8 @@ interface GoogleBooksResponse {
   items: Book[];
 }
 
-async function getBooksForYear(): Promise<Book[]> {
-  const { year } = currentYear();
+async function getBooksForYear(yearString: string): Promise<Book[]> {
+  const { year } = currentYear(yearString);
   const allBooks: Book[] = [];
   let startIndex = 0;
   const maxResults = 40; // Maximum allowed by API
@@ -84,16 +85,11 @@ export function formBookOptions(books: Book[]): Option[] {
 
 const BOOK_QUERY_KEY = TOPIC_KEY.BOOKS;
 
-/**
- * Hook to fetch books data for the current year
- * @param key - The topic key to determine if this hook should be enabled.
- * Only fetches data when key matches TOPIC_KEY.BOOKS to avoid unnecessary API calls.
- */
-export function useBooks(key: TOPIC_KEY) {
+export function useBooks({ key, year }: QUERY_ARGS) {
   const enabled = key === BOOK_QUERY_KEY;
   return useQuery({
     queryKey: [BOOK_QUERY_KEY],
-    queryFn: getBooksForYear,
+    queryFn: () => getBooksForYear(year),
     select: formBookOptions,
     staleTime: STALE_TIME,
     enabled,

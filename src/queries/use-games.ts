@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { handleError, STALE_TIME } from "./utils";
 import { TOPIC_KEY } from "constants/topics";
 import type { Option } from "types/option";
+import type { QUERY_ARGS } from "types/query-args";
 import { currentYear } from "utils/dates";
 
 const IGDB_API_URL = process.env.EXPO_PUBLIC_IGDB_API_URL;
@@ -26,8 +27,8 @@ interface Game {
   summary: string;
 }
 
-async function getGamesForYear(): Promise<Game[]> {
-  const { startDate, endDate } = currentYear();
+async function getGamesForYear(year: string): Promise<Game[]> {
+  const { startDate, endDate } = currentYear(year);
 
   const response = await fetch(`${IGDB_API_URL}/games`, {
     method: "POST",
@@ -66,16 +67,11 @@ export function formGameOptions(games: Game[]): Option[] {
 
 const GAMES_QUERY_KEY = TOPIC_KEY.GAMES;
 
-/**
- * Hook to fetch games data for the current year
- * @param key - The topic key to determine if this hook should be enabled.
- * Only fetches data when key matches TOPIC_KEY.GAMES to avoid unnecessary API calls.
- */
-export function useGames(key: TOPIC_KEY) {
+export function useGames({ key, year }: QUERY_ARGS) {
   const enabled = key === GAMES_QUERY_KEY;
   return useQuery({
     queryKey: [GAMES_QUERY_KEY],
-    queryFn: getGamesForYear,
+    queryFn: () => getGamesForYear(year),
     select: formGameOptions,
     staleTime: STALE_TIME,
     enabled,

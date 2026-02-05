@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { handleError, STALE_TIME } from "./utils";
 import { TOPIC_KEY } from "constants/topics";
 import type { Option } from "types/option";
+import { QUERY_ARGS } from "types/query-args";
 import { currentYear } from "utils/dates";
 
 const TMDB_API_URL = process.env.EXPO_PUBLIC_TMDB_TMDB_API_URL;
@@ -34,8 +35,8 @@ interface TMDBResponse {
   total_results: number;
 }
 
-async function getMoviesForYear(): Promise<Movie[]> {
-  const { startDate, endDate } = currentYear();
+async function getMoviesForYear(year: string): Promise<Movie[]> {
+  const { startDate, endDate } = currentYear(year);
   const allMovies: Movie[] = [];
   let page = 1;
   let totalPages = 1;
@@ -74,16 +75,11 @@ export function formMovieOptions(movies: Movie[]): Option[] {
 
 const MOVIES_QUERY_KEY = TOPIC_KEY.MOVIES;
 
-/**
- * Hook to fetch movies data for the current year
- * @param key - The topic key to determine if this hook should be enabled.
- * Only fetches data when key matches TOPIC_KEY.MOVIES to avoid unnecessary API calls.
- */
-export function useMovies(key: TOPIC_KEY) {
+export function useMovies({ key, year }: QUERY_ARGS) {
   const enabled = key === MOVIES_QUERY_KEY;
   return useQuery({
     queryKey: [MOVIES_QUERY_KEY],
-    queryFn: getMoviesForYear,
+    queryFn: () => getMoviesForYear(year),
     select: formMovieOptions,
     staleTime: STALE_TIME,
     enabled,

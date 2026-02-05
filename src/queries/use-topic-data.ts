@@ -1,14 +1,14 @@
 import { useBooks } from "./use-books";
 import { useGames } from "./use-games";
 import { useMovies } from "./use-movies";
-import { TOPIC_KEY } from "constants/topics";
+import { QUERY_ARGS } from "types/query-args";
 
-export function useTopicData(key: TOPIC_KEY) {
-  const { data: gData, isLoading: gLoading, error: gError } = useGames(key);
+export function useTopicData(args: QUERY_ARGS) {
+  const { data: gData, isLoading: gLoading, error: gError } = useGames(args);
 
-  const { data: mData, isLoading: mLoading, error: mError } = useMovies(key);
+  const { data: mData, isLoading: mLoading, error: mError } = useMovies(args);
 
-  const { data: bData, isLoading: bLoading, error: bError } = useBooks(key);
+  const { data: bData, isLoading: bLoading, error: bError } = useBooks(args);
 
   return {
     data: gData || mData || bData,
