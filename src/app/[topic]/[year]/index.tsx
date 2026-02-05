@@ -13,7 +13,8 @@ import { createStyles } from "utils/theme";
 export default function Topic() {
   const [avatarSeed, setAvatarSeed] = useState("default");
   const [name, setName] = useState("");
-  const { topic, year } = useParams();
+  const { year } = useLocalSearchParams<{ year: string }>();
+  const { topic } = useParams();
   const s = useStyles();
 
   const { data, isLoading, error } = useTopicData(topic.key);
@@ -48,7 +49,7 @@ export default function Topic() {
           asChild
           href={{
             pathname: "/[topic]/[year]/[session]/[round]",
-            params: { topic: topic.key, year: year!, session: "test", round: 1 },
+            params: { topic: topic.key, year, session: "test", round: 1 },
           }}
         >
           <Button label="Start" disabled={disabled} onPress={onSubmit} />

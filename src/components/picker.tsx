@@ -1,28 +1,37 @@
 import { Picker as RNPicker } from "@react-native-picker/picker";
 import { View } from "react-native";
 
-import { TOPIC_KEY, Topics } from "constants/topics";
 import { createStyles } from "utils/theme";
 
-interface Props {
-  topics: Topics[];
-  topic: TOPIC_KEY;
-  onValueChange: (v: TOPIC_KEY) => void;
+interface PickerItem {
+  key: string | number;
+  label: string;
 }
 
-export function Picker({ topics, topic, onValueChange }: Props) {
+interface Props<T extends PickerItem> {
+  data: T[];
+  value: T;
+  onValueChange: (v: T) => void;
+}
+
+export function Picker<T extends PickerItem>({ data, value, onValueChange }: Props<T>) {
   const s = useStyles();
+
+  const onChange = (key: T["key"]) => {
+    const item = data.find((d) => d.key === key);
+    if (item) onValueChange(item);
+  };
 
   return (
     <View style={s.root}>
-      <RNPicker
-        selectedValue={topic}
-        onValueChange={onValueChange}
+      <RNPicker<T["key"]>
+        selectedValue={value.key}
+        onValueChange={onChange}
         style={s.picker}
         itemStyle={s.item}
       >
-        {topics.map((t) => (
-          <RNPicker.Item key={t.key} label={t.label} value={t.key} />
+        {data.map((d) => (
+          <RNPicker.Item key={d.key} label={d.label} value={d.key} />
         ))}
       </RNPicker>
     </View>

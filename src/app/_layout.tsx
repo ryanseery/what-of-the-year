@@ -25,20 +25,20 @@ export default function Root() {
           >
             <Stack.Screen name="index" options={{ headerShown: false }} />
             <Stack.Screen
-              name="[topic]/index"
+              name="[topic]/[year]/index"
               options={({ route }) => {
-                const params = route.params as { topic?: string } | undefined;
+                const params = route.params as { topic: string; year: string } | undefined;
                 const label = getTopic(params?.topic as TOPIC_KEY).label;
                 return {
-                  title: `${label} of the Year`,
+                  title: `${label} of ${params?.year}`,
                 };
               }}
             />
             <Stack.Screen
-              name="[topic]/[table]/[round]"
+              name="[topic]/[year]/[session]/[round]"
               options={({ route }) => {
                 const params = route.params as
-                  | { topic?: string; table: string; round: string }
+                  | { topic: string; year: string; session: string; round: string }
                   | undefined;
                 return {
                   title: `Round ${params?.round}`,
