@@ -4,7 +4,7 @@ export type Year = {
 };
 
 const currentYear = new Date().getFullYear();
-const startYear = 1990;
+const startYear = 1987;
 
 export const years: Year[] = Array.from({ length: currentYear - startYear + 1 }, (_, i) => {
   const year = currentYear - i;

@@ -1,4 +1,4 @@
-import { Link, useLocalSearchParams } from "expo-router";
+import { Link } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
 
@@ -13,15 +13,14 @@ import { createStyles } from "utils/theme";
 export default function Topic() {
   const [avatarSeed, setAvatarSeed] = useState("default");
   const [name, setName] = useState("");
-  const { year } = useLocalSearchParams<{ year: string }>();
-  const { topic } = useParams();
+  const { topic, year } = useParams();
   const s = useStyles();
 
-  const { data, isLoading, error } = useTopicData(topic.key);
+  const { isLoading, error } = useTopicData({ key: topic.key, year: year! });
 
   const source = `https://api.dicebear.com/7.x/bottts/svg?seed=${avatarSeed}`;
 
-  const disabled = name.length < 1;
+  const disabled = isLoading || name.length < 1;
 
   const randomizeAvatar = () => {
     setAvatarSeed(Math.random().toString(36).substring(7));
@@ -49,7 +48,7 @@ export default function Topic() {
           asChild
           href={{
             pathname: "/[topic]/[year]/[session]/[round]",
-            params: { topic: topic.key, year, session: "test", round: 1 },
+            params: { topic: topic.key, year: year!, session: "test", round: 1 },
           }}
         >
           <Button label="Start" disabled={disabled} onPress={onSubmit} />
