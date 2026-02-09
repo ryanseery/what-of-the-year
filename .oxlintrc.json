@@ -1,4 +1,5 @@
 {
+  "ignorePatterns": [".github/**", "README.md"],
   "rules": {
     "react/jsx-key": "error",
     "react/no-children-prop": "error",
