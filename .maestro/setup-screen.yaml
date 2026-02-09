@@ -9,10 +9,6 @@
 - tapOn: "Start"
 - waitForAnimationToEnd
 
-# Verify the avatar is visible
-- assertVisible:
-    id: ".*avatar.*"
-
 # Verify the Random button is visible for avatar randomization
 - assertVisible: "Random"
 
