@@ -14,15 +14,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
-        with:
-          node-version: '20'
+        uses: actions/checkout@v4
       
       - name: Setup Bun
-        uses: oven-sh/setup-bun@8448a241fe1c665b5e0d837c74ba2ebdc7e2cf51 # v2
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: '1.1.38'
       
