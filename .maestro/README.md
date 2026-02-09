@@ -66,7 +66,7 @@ maestro test --app-id host.exp.exponent .maestro/app-launch.yaml
 Run with verbose output:
 
 ```bash
-maestro test --debug .maestro/
+maestro test --debug --app-id host.exp.exponent .maestro/
 ```
 
 ## Writing New Tests
