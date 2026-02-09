@@ -1,8 +1,8 @@
-# Test: Select Topic and Year Flow
-# Verifies the user can select a topic and year, then navigate to the selection screen
+# Test: Topic/Year Setup Screen
+# Verifies the user can select a topic and year, then navigate to the setup screen
+# Also verifies the header is correct based on selections
 #
-# Note: This test works with Expo Go or production builds.
-# If using Expo Go, run: maestro test --app-id host.exp.exponent .maestro/select-topic-and-year.yaml
+# Run with: maestro test --app-id host.exp.exponent .maestro/select-topic-and-year.yaml
 
 - launchApp
 - assertVisible: "of"
@@ -10,8 +10,31 @@
 # Verify the Start button is visible
 - assertVisible: "Start"
 
-# Tap the Start button to navigate
+# Tap the Start button to navigate (defaults to Game of 2026)
 - tapOn: "Start"
 
-# Wait a moment for navigation
+# Wait for navigation to complete
 - waitForAnimationToEnd
+
+# Assert the header shows the correct topic and year
+- assertVisible: "Game of 2026"
+
+# Go back to home screen
+- back
+
+# Select a different topic (Movie)
+- tapOn: "Game"
+- tapOn: "Movie"
+
+# Select a different year (2025)
+- tapOn: "2026"
+- tapOn: "2025"
+
+# Navigate to the setup screen
+- tapOn: "Start"
+
+# Wait for navigation
+- waitForAnimationToEnd
+
+# Assert the header shows the updated selection
+- assertVisible: "Movie of 2025"

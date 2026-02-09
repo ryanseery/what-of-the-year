@@ -37,8 +37,9 @@ This project uses [Maestro](https://maestro.mobile.dev/) for end-to-end testing.
    # For production builds, use your app's bundle identifier
    maestro test --app-id com.yourcompany.whatoftheyear .maestro/
    
+   # Run a specific test
+   maestro test --app-id host.exp.exponent .maestro/home-screen.yaml
+   
    # Add --debug flag for verbose output
    maestro test --debug --app-id host.exp.exponent .maestro/
    ```
-
-For more details, see [.maestro/README.md](.maestro/README.md)

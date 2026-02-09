@@ -1,9 +1,0 @@
-# Test: App Launch and Basic Navigation
-# Verifies that the app launches successfully and displays the main screen
-#
-# Note: This test works with Expo Go or production builds.
-# If using Expo Go, run: maestro test --app-id host.exp.exponent .maestro/app-launch.yaml
-
-- launchApp
-- assertVisible: "of"
-- assertVisible: "Start"

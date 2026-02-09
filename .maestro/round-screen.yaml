@@ -1,0 +1,24 @@
+# Test: Round Screen
+# Verifies the round screen displays correctly
+#
+# Run with: maestro test --app-id host.exp.exponent .maestro/round-screen.yaml
+
+- launchApp
+
+# Navigate to the setup screen
+- tapOn: "Start"
+- waitForAnimationToEnd
+
+# Enter a name to enable the Start button
+- tapOn: "User name"
+- inputText: "Test User"
+
+# Tap Start to navigate to the round screen
+- tapOn: "Start"
+- waitForAnimationToEnd
+
+# Verify the Round header is visible
+- assertVisible: "Round 1"
+
+# Verify the round screen content is visible
+- assertVisible: "Round"
