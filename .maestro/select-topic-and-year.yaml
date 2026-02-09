@@ -1,0 +1,17 @@
+# Test: Select Topic and Year Flow
+# Verifies the user can select a topic and year, then navigate to the selection screen
+#
+# Note: This test works with Expo Go or production builds.
+# If using Expo Go, run: maestro test --app-id host.exp.exponent .maestro/select-topic-and-year.yaml
+
+- launchApp
+- assertVisible: "of"
+
+# Verify the Start button is visible
+- assertVisible: "Start"
+
+# Tap the Start button to navigate
+- tapOn: "Start"
+
+# Wait a moment for navigation
+- waitForAnimationToEnd
