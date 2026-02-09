@@ -1,0 +1,9 @@
+# Test: Home Screen
+# Verifies the home screen displays correctly with topic/year pickers
+#
+# Run with: maestro test --app-id host.exp.exponent .maestro/home-screen.yaml
+
+- launchApp
+- assertVisible: "Game"
+- assertVisible: "of"
+- assertVisible: "Start"
