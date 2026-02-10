@@ -1,0 +1,55 @@
+name: Maestro E2E Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  maestro-cloud:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.1.38'
+      
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      
+      # Set up Expo and EAS CLI
+      - name: Setup Expo
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      
+      # Create iOS simulator build using EAS Build
+      # This will wait for the build to complete and return the download URL
+      - name: Build iOS Simulator App
+        id: build
+        run: |
+          eas build --platform ios --profile preview --non-interactive --wait --json > build-output.json
+          BUILD_URL=$(cat build-output.json | jq -r '.[0].artifacts.buildUrl')
+          echo "build_url=$BUILD_URL" >> $GITHUB_OUTPUT
+          # Download the build
+          curl -L -o app.tar.gz "$BUILD_URL"
+          tar -xzf app.tar.gz
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      
+      # Run Maestro Cloud Tests using the official action
+      - name: Run Maestro Cloud Tests
+        uses: mobile-dev-inc/action-maestro-cloud@v1
+        with:
+          api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+          app-file: '*.app'
+          workspace: .maestro
