@@ -12,5 +12,6 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
-  "cSpell.words": ["IGDB", "TMDB", "whatoftheyear"]
+  "cSpell.words": ["IGDB", "TMDB", "whatoftheyear"],
+  "npm.packageManager": "bun"
 }

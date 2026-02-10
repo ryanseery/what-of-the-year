@@ -1,9 +1,9 @@
 # Test: Round Screen
 # Verifies the round screen displays correctly
-#
-# Run with: maestro test --app-id host.exp.exponent .maestro/round-screen.yaml
-
+appId: host.exp.Exponent
+---
 - launchApp
+- tapOn: what-of-the-year
 
 - tapOn: "Start"
 - waitForAnimationToEnd

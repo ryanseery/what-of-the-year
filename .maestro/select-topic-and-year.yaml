@@ -1,10 +1,10 @@
 # Test: Topic/Year Setup Screen
 # Verifies the user can select a topic and year, then navigate to the setup screen
 # Also verifies the header is correct based on selections
-#
-# Run with: maestro test --app-id host.exp.exponent .maestro/select-topic-and-year.yaml
-
+appId: host.exp.Exponent
+---
 - launchApp
+- tapOn: what-of-the-year
 
 - tapOn: "Start"
 - waitForAnimationToEnd

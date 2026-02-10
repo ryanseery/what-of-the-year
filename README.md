@@ -31,15 +31,17 @@ This project uses [Maestro](https://maestro.mobile.dev/) for end-to-end testing.
 
 3. Run the tests:
    ```bash
-   # For Expo Go (development)
-   maestro test --app-id host.exp.exponent .maestro/
-   
-   # For production builds, use your app's bundle identifier
-   maestro test --app-id com.yourcompany.whatoftheyear .maestro/
+   # Run all tests in the .maestro directory
+   maestro test .maestro/
    
    # Run a specific test
-   maestro test --app-id host.exp.exponent .maestro/home-screen.yaml
+   maestro test .maestro/home-screen.yaml
    
-   # Add --debug flag for verbose output
-   maestro test --debug --app-id host.exp.exponent .maestro/
+   # Add --debug-output flag for verbose output
+   maestro test --debug-output=./output .maestro/
+   
+   # Run tests on a specific device (if multiple are connected)
+   maestro test --device "iPhone 15" .maestro/
    ```
+
+> **Note:** Each test file contains an `appId: host.exp.Exponent` configuration at the top, which tells Maestro which app to test (Expo Go in development). For production builds, update the `appId` in each `.yaml` file to match your app's bundle identifier.
