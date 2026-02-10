@@ -15,5 +15,3 @@
 - waitForAnimationToEnd
 
 - assertVisible: "Round 1"
-
-- assertVisible: "Round"

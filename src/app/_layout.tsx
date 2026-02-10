@@ -3,6 +3,7 @@ import { Stack } from "expo-router";
 
 import { WebContainer } from "components/web-container";
 import { getTopic, TOPIC_KEY } from "constants/topics";
+import { Params } from "hooks/use-params";
 import { STALE_TIME } from "queries/utils";
 import { ThemeProvider } from "utils/theme";
 
@@ -27,7 +28,7 @@ export default function Root() {
             <Stack.Screen
               name="[topic]/[year]/index"
               options={({ route }) => {
-                const params = route.params as { topic: string; year: string } | undefined;
+                const params = route.params as Params;
                 const label = getTopic(params?.topic as TOPIC_KEY).label;
                 return {
                   title: `${label} of ${params?.year}`,
@@ -37,9 +38,7 @@ export default function Root() {
             <Stack.Screen
               name="[topic]/[year]/[session]/[round]"
               options={({ route }) => {
-                const params = route.params as
-                  | { topic: string; year: string; session: string; round: string }
-                  | undefined;
+                const params = route.params as Params;
                 return {
                   title: `Round ${params?.round}`,
                 };

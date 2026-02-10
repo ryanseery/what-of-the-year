@@ -1,3 +1,4 @@
+import { useHeaderHeight } from "@react-navigation/elements";
 import { Link } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
@@ -15,6 +16,7 @@ export default function Topic() {
   const [name, setName] = useState("");
   const { topic, year } = useParams();
   const s = useStyles();
+  const headerHeight = useHeaderHeight();
 
   const { isLoading, error } = useTopicData({ key: topic.key, year: year! });
 
@@ -32,8 +34,8 @@ export default function Topic() {
   };
 
   return (
-    <KeyboardAvoidingView style={s.root}>
-      <View style={s.container}>
+    <KeyboardAvoidingView style={s.root} keyboardVerticalOffset={headerHeight}>
+      <View style={[s.container, { marginTop: -headerHeight / 2 }]}>
         <View style={s.avatar}>
           <Avatar source={source} size={120} />
           <Button style={s.btn} label="Random" onPress={randomizeAvatar} />
