@@ -4,6 +4,14 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      # Only run tests when relevant files change
+      - 'src/**'
+      - '.maestro/**'
+      - 'app.json'
+      - 'eas.json'
+      - 'package.json'
+      - '.github/workflows/maestro.yml'
   workflow_dispatch:
 
 jobs:
@@ -40,9 +48,14 @@ jobs:
           eas build --platform ios --profile preview --non-interactive --wait --json > build-output.json
           BUILD_URL=$(cat build-output.json | jq -r '.[0].artifacts.buildUrl')
           echo "build_url=$BUILD_URL" >> $GITHUB_OUTPUT
-          # Download the build
+          # Download and extract the build
           curl -L -o app.tar.gz "$BUILD_URL"
-          tar -xzf app.tar.gz
+          mkdir -p build
+          tar -xzf app.tar.gz -C build
+          # Find the .app file
+          APP_PATH=$(find build -name "*.app" -type d | head -n 1)
+          echo "app_path=$APP_PATH" >> $GITHUB_OUTPUT
+          ls -la build/
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
       
@@ -51,5 +64,5 @@ jobs:
         uses: mobile-dev-inc/action-maestro-cloud@v1
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
-          app-file: '*.app'
+          app-file: ${{ steps.build.outputs.app_path }}
           workspace: .maestro
