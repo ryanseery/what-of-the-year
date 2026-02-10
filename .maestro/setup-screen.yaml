@@ -5,15 +5,11 @@
 
 - launchApp
 
-# Navigate to the setup screen
 - tapOn: "Start"
 - waitForAnimationToEnd
 
-# Verify the Random button is visible for avatar randomization
 - assertVisible: "Random"
 
-# Verify the user name input field is visible
 - assertVisible: "User name"
-
 # Verify the Start button is visible (but may be disabled)
 - assertVisible: "Start"
