@@ -31,6 +31,7 @@ const baseText = {
     lg: 18,
     xl: 24,
     xxl: 32,
+    title: 72,
   },
   weight: {
     regular: "400" as const,

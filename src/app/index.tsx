@@ -28,7 +28,7 @@ export default function Index() {
     <SafeAreaView style={s.root}>
       <View style={s.content}>
         <Picker data={topics} value={topic} onValueChange={onTopicChange} />
-        <Text style={s.ofTheText}>of</Text>
+        <Text style={s.of}>of</Text>
         <Picker data={years} value={year} onValueChange={onYearChange} />
       </View>
 
@@ -56,15 +56,10 @@ const useStyles = createStyles((t) => ({
     alignItems: "center",
     justifyContent: "center",
   },
-  ofTheText: {
+  of: {
     fontSize: 52,
     fontWeight: t.text.weight.bold,
     color: t.text.color.primary,
-    marginVertical: t.spacing.md,
-  },
-  yearText: {
-    fontSize: 72,
-    fontWeight: t.text.weight.bold,
-    color: t.text.color.primary,
+    marginBottom: t.spacing.lg,
   },
 }));

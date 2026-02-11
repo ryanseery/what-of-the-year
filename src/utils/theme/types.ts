@@ -39,6 +39,7 @@ export interface Theme {
       lg: number;
       xl: number;
       xxl: number;
+      title: number;
     };
     weight: {
       regular: "400";

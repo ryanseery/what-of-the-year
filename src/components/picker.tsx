@@ -43,14 +43,13 @@ const useStyles = createStyles((t) => ({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: t.spacing.md,
   },
   pickerContainer: {
     width: "100%",
     overflow: "hidden",
   },
   item: {
-    fontSize: 72,
+    fontSize: t.text.size.title,
     fontWeight: t.text.weight.bold,
     color: t.colors.primary,
     height: 88,
