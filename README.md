@@ -25,8 +25,7 @@ This project uses [Maestro](https://maestro.mobile.dev/) for end-to-end testing.
 
 2. Start the app on a simulator/emulator:
    ```bash
-   bun ios    # For iOS
-   bun android # For Android
+   bun start
    ```
 
 3. Run the tests:

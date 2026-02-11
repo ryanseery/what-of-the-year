@@ -1,6 +1,7 @@
-# Test: Setup Screen (Topic/Year Selection)
-# Verifies the setup screen displays correctly with avatar and name input
 appId: host.exp.Exponent
+name: Set Up
+tags:
+  - smoke
 ---
 - launchApp
 - tapOn: what-of-the-year

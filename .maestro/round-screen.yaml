@@ -1,6 +1,7 @@
-# Test: Round Screen
-# Verifies the round screen displays correctly
 appId: host.exp.Exponent
+name: Round Screen
+tags:
+  - smoke
 ---
 - launchApp
 - tapOn: what-of-the-year

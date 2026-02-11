@@ -27,9 +27,9 @@ export default function Index() {
   return (
     <SafeAreaView style={s.root}>
       <View style={s.content}>
-        <Picker data={topics} value={topic} onValueChange={onTopicChange} />
+        <Picker testID="topic-picker" data={topics} value={topic} onValueChange={onTopicChange} />
         <Text style={s.of}>of</Text>
-        <Picker data={years} value={year} onValueChange={onYearChange} />
+        <Picker testID="year-picker" data={years} value={year} onValueChange={onYearChange} />
       </View>
 
       <Link

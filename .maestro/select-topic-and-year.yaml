@@ -1,7 +1,7 @@
-# Test: Topic/Year Setup Screen
-# Verifies the user can select a topic and year, then navigate to the setup screen
-# Also verifies the header is correct based on selections
 appId: host.exp.Exponent
+name: Select Topic and Year
+tags:
+  - smoke
 ---
 - launchApp
 - tapOn: what-of-the-year
@@ -11,14 +11,16 @@ appId: host.exp.Exponent
 
 - assertVisible: "Game of 2026"
 
-- back
+- tapOn:
+    id: BackButton
 
-# Select a different topic (Movie)
-- tapOn: "Game"
-- tapOn: "Movie"
+- swipe:
+    start: 50%, 37%
+    end: 50%, 27%
 
-- tapOn: "2026"
-- tapOn: "2025"
+- swipe:
+    start: 50%, 62%
+    end: 50%, 52%
 
 - tapOn: "Start"
 - waitForAnimationToEnd

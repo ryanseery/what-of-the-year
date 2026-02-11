@@ -1,6 +1,7 @@
-# Test: Home Screen
-# Verifies the home screen displays correctly with topic/year pickers
 appId: host.exp.Exponent
+name: Home
+tags:
+  - smoke
 ---
 - launchApp
 - tapOn: what-of-the-year

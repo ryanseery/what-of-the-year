@@ -12,9 +12,10 @@ interface Props<T extends PickerItem> {
   data: T[];
   value: T;
   onValueChange: (v: T) => void;
+  testID?: string;
 }
 
-export function Picker<T extends PickerItem>({ data, value, onValueChange }: Props<T>) {
+export function Picker<T extends PickerItem>({ data, value, onValueChange, testID }: Props<T>) {
   const s = useStyles();
 
   const onChange = (key: T["key"]) => {
@@ -25,6 +26,7 @@ export function Picker<T extends PickerItem>({ data, value, onValueChange }: Pro
   return (
     <View style={s.root}>
       <RNPicker<T["key"]>
+        testID={testID}
         selectedValue={value.key}
         onValueChange={onChange}
         style={s.picker}
