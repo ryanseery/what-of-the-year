@@ -1,5 +1,5 @@
 import { useHeaderHeight } from "@react-navigation/elements";
-import { Link } from "expo-router";
+import { router } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
 
@@ -7,30 +7,64 @@ import { Avatar } from "components/avatar";
 import { Button } from "components/button";
 import { Input } from "components/input";
 import { KeyboardAvoidingView } from "components/keyboard-avoiding-view";
+import { createSession } from "db/create-session";
+import { joinSession } from "db/join-session";
+import { useAuth } from "db/use-auth";
 import { useParams } from "hooks/use-params";
 import { useTopicData } from "queries/use-topic-data";
 import { createStyles } from "utils/theme";
 
-export default function Topic() {
+export default function TopicScreen() {
   const [avatarSeed, setAvatarSeed] = useState("default");
   const [name, setName] = useState("");
-  const { topic, year } = useParams();
+  const { topic, year, session: existingSessionId } = useParams();
+  const { mutateAsync: signIn, isPending } = useAuth();
   const s = useStyles();
   const headerHeight = useHeaderHeight();
 
-  const { isLoading, error } = useTopicData({ key: topic.key, year: year! });
+  const { isLoading } = useTopicData({ key: topic.key, year: year! });
 
   const source = `https://api.dicebear.com/7.x/bottts/svg?seed=${avatarSeed}`;
 
-  const disabled = isLoading || name.length < 1;
+  const isJoining = !!existingSessionId;
+  const disabled = isLoading || isPending || name.length < 1;
 
   const randomizeAvatar = () => {
     setAvatarSeed(Math.random().toString(36).substring(7));
   };
 
-  const onSubmit = () => {
-    // handle table creation
-    console.log("onSubmit");
+  const onSubmit = async () => {
+    try {
+      const user = await signIn();
+
+      let sessionId: string;
+
+      if (isJoining && existingSessionId) {
+        const result = await joinSession({
+          sessionId: existingSessionId,
+          uid: user.uid,
+          name,
+          avatar: source,
+        });
+        sessionId = result.sessionId;
+      } else {
+        const result = await createSession({
+          topic: topic.key,
+          year: Number(year),
+          uid: user.uid,
+          name,
+          avatar: source,
+        });
+        sessionId = result.sessionId;
+      }
+
+      router.replace({
+        pathname: "/[topic]/[year]/[session]/[round]",
+        params: { topic: topic.key, year: year!, session: sessionId, round: "1" },
+      });
+    } catch (e) {
+      console.error("Failed to submit:", e);
+    }
   };
 
   return (
@@ -45,16 +79,11 @@ export default function Topic() {
           value={name}
           onChangeText={(text: string) => setName(text)}
         />
-        <Link
+        <Button
+          label={isPending ? "Loading..." : isJoining ? "Join" : "Start"}
           disabled={disabled}
-          asChild
-          href={{
-            pathname: "/[topic]/[year]/[session]/[round]",
-            params: { topic: topic.key, year: year!, session: "test", round: 1 },
-          }}
-        >
-          <Button label="Start" disabled={disabled} onPress={onSubmit} />
-        </Link>
+          onPress={onSubmit}
+        />
       </View>
     </KeyboardAvoidingView>
   );

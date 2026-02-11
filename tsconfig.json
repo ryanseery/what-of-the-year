@@ -5,13 +5,16 @@
     "baseUrl": ".",
     "types": ["bun-types"],
     "paths": {
+      "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"],
       "app/*": ["src/app/*"],
       "components/*": ["src/components/*"],
       "constants/*": ["src/constants/*"],
       "hooks/*": ["src/hooks/*"],
       "queries/*": ["src/queries/*"],
       "types/*": ["src/types/*"],
-      "utils/*": ["src/utils/*"]
+      "utils/*": ["src/utils/*"],
+      "db/*": ["src/db/*"],
+      "screens/*": ["src/screens/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
