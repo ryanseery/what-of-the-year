@@ -67,7 +67,7 @@ export function formMovieOptions(movies: Movie[]): Option[] {
     id: movie.id,
     name: movie.title,
     cover: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : undefined,
-    rating: movie.vote_average * 10, // Convert 0-10 to 0-100 scale
+    rating: movie.vote_average,
     first_release_date: new Date(movie.release_date).getTime() / 1000,
     summary: movie.overview,
   }));

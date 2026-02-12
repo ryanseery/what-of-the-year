@@ -5,6 +5,7 @@ import { View } from "react-native";
 
 import { Avatar } from "components/avatar";
 import { Button } from "components/button";
+import { Error } from "components/error";
 import { Input } from "components/input";
 import { KeyboardAvoidingView } from "components/keyboard-avoiding-view";
 import { createSession } from "db/create-session";
@@ -14,7 +15,7 @@ import { useParams } from "hooks/use-params";
 import { useTopicData } from "queries/use-topic-data";
 import { createStyles } from "utils/theme";
 
-export default function TopicScreen() {
+export default function Topic() {
   const [avatarSeed, setAvatarSeed] = useState("default");
   const [name, setName] = useState("");
   const { topic, year, session: existingSessionId } = useParams();
@@ -22,7 +23,7 @@ export default function TopicScreen() {
   const s = useStyles();
   const headerHeight = useHeaderHeight();
 
-  const { isLoading } = useTopicData({ key: topic.key, year: year! });
+  const { isLoading, isError, refetch } = useTopicData({ key: topic.key, year: year! });
 
   const source = `https://api.dicebear.com/7.x/bottts/svg?seed=${avatarSeed}`;
 
@@ -67,6 +68,10 @@ export default function TopicScreen() {
     }
   };
 
+  if (isError) {
+    return <Error onRetry={refetch} />;
+  }
+
   return (
     <KeyboardAvoidingView style={s.root} keyboardVerticalOffset={headerHeight}>
       <View style={[s.container, { marginTop: -headerHeight / 2 }]}>
@@ -80,7 +85,7 @@ export default function TopicScreen() {
           onChangeText={(text: string) => setName(text)}
         />
         <Button
-          label={isPending ? "Loading..." : isJoining ? "Join" : "Start"}
+          label={isPending ? "Loading..." : isJoining ? "Join" : "Create"}
           disabled={disabled}
           onPress={onSubmit}
         />
