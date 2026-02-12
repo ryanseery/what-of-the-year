@@ -12,6 +12,17 @@
    bun start
    ```
 
+## React Query Dev Tools
+
+This project uses the [Expo dev tools plugin for React Query](https://docs.expo.dev/debugging/devtools-plugins/#react-query) to inspect query states, cache, and data during development.
+
+1. Start the app:
+   ```bash
+   bun start
+   ```
+
+2. Press `shift+m` in the terminal to open the dev tools menu, then select **React Query**.
+
 ## Running E2E Tests
 
 This project uses [Maestro](https://maestro.mobile.dev/) for end-to-end testing. Maestro is a standalone CLI tool that requires **zero dependencies** in your project.
