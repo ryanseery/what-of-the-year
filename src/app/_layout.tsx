@@ -36,6 +36,16 @@ export default function Root() {
               }}
             />
             <Stack.Screen
+              name="[topic]/[year]/[session]/index"
+              options={({ route }) => {
+                const params = route.params as Params;
+                const label = getTopic(params?.topic as TOPIC_KEY).label;
+                return {
+                  title: `Lobby ${label} of ${params?.year}`,
+                };
+              }}
+            />
+            <Stack.Screen
               name="[topic]/[year]/[session]/[round]"
               options={({ route }) => {
                 const params = route.params as Params;

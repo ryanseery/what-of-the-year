@@ -60,7 +60,7 @@ export default function Topic() {
       }
 
       router.replace({
-        pathname: "/[topic]/[year]/[session]/[round]",
+        pathname: "/[topic]/[year]/[session]",
         params: { topic: topic.key, year: year!, session: sessionId, round: "1" },
       });
     } catch (e) {
