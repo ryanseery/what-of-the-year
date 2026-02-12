@@ -4,10 +4,20 @@ import { useEffect, useState } from "react";
 import { playersRef } from "db/collections";
 import type { Player } from "db/types";
 
+/** A {@link Player} enriched with the Firestore document ID. */
 interface PlayerWithId extends Player {
   uid: string;
 }
 
+/**
+ * Subscribes to the players collection for a given session in real time.
+ *
+ * Players are ordered by `joinedAt` ascending. The subscription is
+ * automatically cleaned up when the component unmounts or `sessionId` changes.
+ *
+ * @param sessionId - The session to listen to. Pass `undefined` to skip subscribing.
+ * @returns An object containing the `players` array, an `isLoading` flag, and any `error`.
+ */
 export function usePlayers(sessionId: string | undefined) {
   const [players, setPlayers] = useState<PlayerWithId[]>([]);
   const [isLoading, setIsLoading] = useState(true);

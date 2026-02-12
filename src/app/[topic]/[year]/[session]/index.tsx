@@ -38,6 +38,8 @@ export default function Lobby() {
     // TODO: start game — close session + navigate to round 1
   };
 
+  const disabled = players.length < 2;
+
   return (
     <View style={s.root}>
       <View style={s.header}>
@@ -64,7 +66,7 @@ export default function Lobby() {
 
       {isHost && (
         <View style={s.footer}>
-          <Button label="Start Game" onPress={onStartGame} disabled={players.length < 2} />
+          <Button label="Start" onPress={onStartGame} disabled={disabled} />
         </View>
       )}
     </View>
