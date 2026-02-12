@@ -41,7 +41,6 @@ async function getGamesForYear(year: string): Promise<Game[]> {
       fields name, cover.url, rating, aggregated_rating, total_rating, first_release_date, summary;
       where first_release_date >= ${startDate} & first_release_date < ${endDate};
       sort total_rating desc;
-      limit 100;
     `,
   });
 
