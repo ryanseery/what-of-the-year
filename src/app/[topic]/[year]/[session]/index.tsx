@@ -25,7 +25,7 @@ export default function Lobby() {
   if (!session) return <Error />;
 
   const onShareInvite = async () => {
-    const url = Linking.createURL(`/${topic.key}/${year}`, {
+    const url = Linking.createURL(`/${topic.value}/${year}`, {
       queryParams: { session: sessionId! },
     });
 

@@ -1,10 +1,12 @@
-import { Picker as RNPicker } from "@react-native-picker/picker";
-import { View } from "react-native";
+import WheelPicker from "@quidone/react-native-wheel-picker";
+import * as Haptics from "expo-haptics";
+import { useMemo } from "react";
+import { Platform, type ViewStyle } from "react-native";
 
 import { createStyles } from "utils/theme";
 
 interface PickerItem {
-  key: string | number;
+  value: string | number;
   label: string;
 }
 
@@ -18,48 +20,47 @@ interface Props<T extends PickerItem> {
 export function Picker<T extends PickerItem>({ data, value, onValueChange, testID }: Props<T>) {
   const s = useStyles();
 
-  const onChange = (key: T["key"]) => {
-    const item = data.find((d) => d.key === key);
-    if (item) onValueChange(item);
+  const handleValueChanging = ({ item }: { item: PickerItem }) => {
+    Haptics.selectionAsync();
+    if (Platform.OS === "web") {
+      const match = data.find((d) => d.value === item.value);
+      if (match) onValueChange(match);
+    }
+  };
+
+  const handleValueChanged = ({ item }: { item: PickerItem }) => {
+    const match = data.find((d) => d.value === item.value);
+    if (match) onValueChange(match);
   };
 
   return (
-    <View style={s.root}>
-      <RNPicker<T["key"]>
-        testID={testID}
-        selectedValue={value.key}
-        onValueChange={onChange}
-        style={s.picker}
-        itemStyle={s.item}
-      >
-        {data.map((d) => (
-          <RNPicker.Item key={d.key} label={d.label} value={d.key} />
-        ))}
-      </RNPicker>
-    </View>
+    <WheelPicker
+      testID={testID}
+      data={data}
+      value={value.value}
+      onValueChanging={handleValueChanging}
+      onValueChanged={handleValueChanged}
+      itemHeight={88}
+      visibleItemCount={1}
+      width="100%"
+      itemTextStyle={s.item}
+      style={s.picker}
+    />
   );
 }
 
 const useStyles = createStyles((t) => ({
-  root: {
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  pickerContainer: {
-    width: "100%",
-    overflow: "hidden",
-  },
   item: {
     fontSize: t.text.size.title,
     fontWeight: t.text.weight.bold,
     color: t.colors.primary,
-    height: 88,
   },
   picker: {
-    width: "100%",
-    height: 120,
     backgroundColor: t.colors.background,
-    color: t.colors.primary,
+    ...Platform.select({
+      web: {
+        cursor: "ns-resize",
+      } as unknown as ViewStyle,
+    }),
   },
 }));

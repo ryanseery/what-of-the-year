@@ -17,7 +17,7 @@ export default function Index() {
 
   const onTopicChange = (v: Topics) => {
     setTopic(v);
-    setTheme(v.key);
+    setTheme(v.value);
   };
 
   const onYearChange = (v: Year) => {
@@ -36,7 +36,7 @@ export default function Index() {
         asChild
         href={{
           pathname: "/[topic]/[year]",
-          params: { topic: topic.key, year: year.key },
+          params: { topic: topic.value, year: year.value },
         }}
       >
         <Button label="Start" />
@@ -60,6 +60,6 @@ const useStyles = createStyles((t) => ({
     fontSize: 52,
     fontWeight: t.text.weight.bold,
     color: t.text.color.primary,
-    marginBottom: t.spacing.lg,
+    marginVertical: t.spacing.lg,
   },
 }));

@@ -1,5 +1,5 @@
 export type Year = {
-  key: number;
+  value: number;
   label: string;
 };
 
@@ -9,7 +9,7 @@ const startYear = 1987;
 export const years: Year[] = Array.from({ length: currentYear - startYear + 1 }, (_, i) => {
   const year = currentYear - i;
   return {
-    key: year,
+    value: year,
     label: year.toString(),
   };
 });

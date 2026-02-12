@@ -23,7 +23,7 @@ export default function Topic() {
   const s = useStyles();
   const headerHeight = useHeaderHeight();
 
-  const { isLoading, isError, refetch } = useTopicData({ key: topic.key, year: year! });
+  const { isLoading, isError, refetch } = useTopicData({ key: topic.value, year: year! });
 
   const source = `https://api.dicebear.com/7.x/bottts/svg?seed=${avatarSeed}`;
 
@@ -55,7 +55,7 @@ export default function Topic() {
         sessionId = existingSessionId;
       } else {
         const result = await createSession({
-          topic: topic.key,
+          topic: topic.value,
           year: Number(year),
           uid: user.uid,
           name,
@@ -66,7 +66,7 @@ export default function Topic() {
 
       router.replace({
         pathname: "/[topic]/[year]/[session]",
-        params: { topic: topic.key, year: year!, session: sessionId, round: "1" },
+        params: { topic: topic.value, year: year!, session: sessionId, round: "1" },
       });
     } catch (e) {
       console.error("Failed to submit:", e);
