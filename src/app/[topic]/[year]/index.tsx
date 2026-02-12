@@ -41,13 +41,18 @@ export default function Topic() {
       let sessionId: string;
 
       if (isJoining && existingSessionId) {
-        const result = await joinSession({
-          sessionId: existingSessionId,
-          uid: user.uid,
-          name,
-          avatar: source,
-        });
-        sessionId = result.sessionId;
+        try {
+          await joinSession({
+            sessionId: existingSessionId,
+            uid: user.uid,
+            name,
+            avatar: source,
+          });
+        } catch (e: unknown) {
+          const error = e as Error;
+          if (error.message !== "Already joined this session") throw e;
+        }
+        sessionId = existingSessionId;
       } else {
         const result = await createSession({
           topic: topic.key,
