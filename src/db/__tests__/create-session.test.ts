@@ -43,7 +43,7 @@ describe("createSession", () => {
     mockRoundsBatchCommit.mockClear();
   });
 
-  it("returns a sessionId and inviteCode", async () => {
+  it("returns a sessionId", async () => {
     const result = await createSession({
       topic: "games",
       year: 2025,
@@ -53,8 +53,6 @@ describe("createSession", () => {
     });
 
     expect(result.sessionId).toBe("mock-session-id");
-    expect(result.inviteCode).toBeString();
-    expect(result.inviteCode).toHaveLength(6);
   });
 
   it("creates 1 session + 1 player in batch 1 and 10 rounds in batch 2", async () => {

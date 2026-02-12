@@ -7,14 +7,10 @@ export const SESSION_TTL_MS = 24 * 60 * 60 * 1000;
 /** Deterministic round weights: round 1 = 1pt, round 10 = 10pts */
 export const getRoundWeight = (roundNumber: number) => roundNumber;
 
-/** Generate a short invite code */
-export const generateInviteCode = () => Math.random().toString(36).substring(2, 8).toUpperCase();
-
 /** Build the session document data */
-export const buildSession = (topic: string, year: number, inviteCode: string) => ({
+export const buildSession = (topic: string, year: number) => ({
   topic,
   year,
-  inviteCode,
   maxRounds: MAX_ROUNDS,
   maxPlayers: MAX_PLAYERS,
   isOpen: true,

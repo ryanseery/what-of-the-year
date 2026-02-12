@@ -1,12 +1,6 @@
 import { Timestamp, doc, serverTimestamp, writeBatch } from "firebase/firestore";
 
-import {
-  SESSION_TTL_MS,
-  buildAllRounds,
-  buildPlayer,
-  buildSession,
-  generateInviteCode,
-} from "db/builders";
+import { SESSION_TTL_MS, buildAllRounds, buildPlayer, buildSession } from "db/builders";
 import { playerRef, roundRef, sessionsRef } from "db/collections";
 import { db } from "db/config";
 
@@ -28,8 +22,6 @@ interface CreateSessionArgs {
  * Returns the new session ID.
  */
 export async function createSession({ topic, year, uid, name, avatar }: CreateSessionArgs) {
-  const inviteCode = generateInviteCode();
-
   const newSessionRef = doc(sessionsRef());
   const sessionId = newSessionRef.id;
 
@@ -37,7 +29,7 @@ export async function createSession({ topic, year, uid, name, avatar }: CreateSe
   const sessionBatch = writeBatch(db);
 
   sessionBatch.set(newSessionRef, {
-    ...buildSession(topic, year, inviteCode),
+    ...buildSession(topic, year),
     createdAt: serverTimestamp(),
     expiresAt: Timestamp.fromMillis(Date.now() + SESSION_TTL_MS),
   });
@@ -58,5 +50,5 @@ export async function createSession({ topic, year, uid, name, avatar }: CreateSe
 
   await roundsBatch.commit();
 
-  return { sessionId, inviteCode };
+  return { sessionId };
 }

@@ -12,7 +12,7 @@ Home (pick topic + year)
   → Lobby Screen (/[topic]/[year]/[session])
       - Real-time listener on players subcollection
       - Host sees player list update as friends join
-      - Share button builds deep link from inviteCode
+      - Share button builds deep link from sessionId
           whatoftheyear://games/2025/{sessionId}
           or https://whatoftheyear.com/games/2025/{sessionId}
       - "Start Game" button (host only)

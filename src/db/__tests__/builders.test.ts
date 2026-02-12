@@ -7,7 +7,6 @@ import {
   buildPlayer,
   buildRound,
   buildSession,
-  generateInviteCode,
   getRoundWeight,
 } from "../builders";
 
@@ -19,28 +18,13 @@ describe("getRoundWeight", () => {
   });
 });
 
-describe("generateInviteCode", () => {
-  it("returns a 6-character uppercase string", () => {
-    const code = generateInviteCode();
-    expect(code).toHaveLength(6);
-    expect(code).toMatch(/^[A-Z0-9]+$/);
-  });
-
-  it("generates unique codes", () => {
-    const codes = new Set(Array.from({ length: 100 }, () => generateInviteCode()));
-    // with 36^6 possibilities, 100 codes should all be unique
-    expect(codes.size).toBe(100);
-  });
-});
-
 describe("buildSession", () => {
   it("creates a session with correct defaults", () => {
-    const session = buildSession("games", 2025, "ABC123");
+    const session = buildSession("games", 2025);
 
     expect(session).toEqual({
       topic: "games",
       year: 2025,
-      inviteCode: "ABC123",
       maxRounds: MAX_ROUNDS,
       maxPlayers: MAX_PLAYERS,
       isOpen: true,
@@ -50,17 +34,17 @@ describe("buildSession", () => {
   });
 
   it("sets playerCount to 1 (host)", () => {
-    const session = buildSession("movies", 2024, "XYZ789");
+    const session = buildSession("movies", 2024);
     expect(session.playerCount).toBe(1);
   });
 
   it("starts on round 1", () => {
-    const session = buildSession("books", 2023, "DEF456");
+    const session = buildSession("books", 2023);
     expect(session.activeRoundNumber).toBe(1);
   });
 
   it("defaults to open", () => {
-    const session = buildSession("games", 2025, "GHI012");
+    const session = buildSession("games", 2025);
     expect(session.isOpen).toBe(true);
   });
 });

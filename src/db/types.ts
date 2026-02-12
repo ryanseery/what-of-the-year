@@ -6,7 +6,6 @@ import type { TOPIC_KEY } from "constants/topics";
 export interface Session {
   topic: TOPIC_KEY;
   year: number;
-  inviteCode: string;
   maxRounds: number;
   maxPlayers: number;
   isOpen: boolean;

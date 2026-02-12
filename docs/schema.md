@@ -6,7 +6,6 @@ erDiagram
     sessionId string PK "doc id / invite link id"
     topic string
     year int
-    inviteCode string UK "unique, shareable"
     maxRounds int
     maxPlayers int
     isOpen boolean
@@ -69,7 +68,6 @@ User clicks Start, let up to ~10 ephemeral players join, store one pick per play
 
 ## Constraints & Validation
 
-- `inviteCode` must be unique across all active sessions
 - `pick.id` must be unique within each round (prevent duplicate picks)
 - Transactions enforce: validate uniqueness → write selection → increment `selectionsComplete`
 - Security rules enforce: only host can transition round states, players can only write their own selection once per round
