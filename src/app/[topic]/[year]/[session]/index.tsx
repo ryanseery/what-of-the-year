@@ -30,7 +30,7 @@ export default function Lobby() {
     });
 
     await Share.share({
-      message: `Join my ${topic.label} of ${year} game!\n${url}`,
+      message: `Join my ${topic.label} of ${year}!\n${url}`,
     });
   };
 
