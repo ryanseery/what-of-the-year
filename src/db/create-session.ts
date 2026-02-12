@@ -33,28 +33,30 @@ export async function createSession({ topic, year, uid, name, avatar }: CreateSe
   const newSessionRef = doc(sessionsRef());
   const sessionId = newSessionRef.id;
 
-  const batch = writeBatch(db);
+  // Batch 1: session + host player (must exist before rounds for security rules)
+  const sessionBatch = writeBatch(db);
 
-  // Session doc
-  batch.set(newSessionRef, {
+  sessionBatch.set(newSessionRef, {
     ...buildSession(topic, year, inviteCode),
     createdAt: serverTimestamp(),
     expiresAt: Timestamp.fromMillis(Date.now() + SESSION_TTL_MS),
   });
 
-  // Host player doc
-  batch.set(playerRef(sessionId, uid), {
+  sessionBatch.set(playerRef(sessionId, uid), {
     ...buildPlayer(name, avatar, true),
     joinedAt: serverTimestamp(),
   });
 
-  // All round docs
+  await sessionBatch.commit();
+
+  // Batch 2: rounds (isHost check requires player doc to exist)
+  const roundsBatch = writeBatch(db);
   const rounds = buildAllRounds();
   for (const round of rounds) {
-    batch.set(roundRef(sessionId, round.number), round);
+    roundsBatch.set(roundRef(sessionId, round.number), round);
   }
 
-  await batch.commit();
+  await roundsBatch.commit();
 
   return { sessionId, inviteCode };
 }

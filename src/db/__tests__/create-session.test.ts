@@ -3,8 +3,12 @@ import { afterEach, describe, expect, it, mock } from "bun:test";
 import { MAX_ROUNDS } from "../builders";
 
 // --- Mock Firestore and config BEFORE importing createSession ---
-const mockSet = mock(() => {});
-const mockCommit = mock(() => Promise.resolve());
+const mockSessionBatchSet = mock(() => {});
+const mockSessionBatchCommit = mock(() => Promise.resolve());
+const mockRoundsBatchSet = mock(() => {});
+const mockRoundsBatchCommit = mock(() => Promise.resolve());
+
+let batchCallCount = 0;
 
 mock.module("db/config", () => ({
   db: {},
@@ -16,10 +20,13 @@ mock.module("firebase/firestore", () => ({
   },
   doc: (_collection: unknown) => ({ id: "mock-session-id" }),
   collection: (...segments: string[]) => ({ path: segments.join("/") }),
-  writeBatch: () => ({
-    set: mockSet,
-    commit: mockCommit,
-  }),
+  writeBatch: () => {
+    batchCallCount++;
+    if (batchCallCount % 2 === 1) {
+      return { set: mockSessionBatchSet, commit: mockSessionBatchCommit };
+    }
+    return { set: mockRoundsBatchSet, commit: mockRoundsBatchCommit };
+  },
   serverTimestamp: () => ({ _type: "serverTimestamp" }),
   runTransaction: () => Promise.resolve(),
   increment: (n: number) => ({ _type: "increment", value: n }),
@@ -30,8 +37,10 @@ const { createSession } = await import("../create-session");
 
 describe("createSession", () => {
   afterEach(() => {
-    mockSet.mockClear();
-    mockCommit.mockClear();
+    mockSessionBatchSet.mockClear();
+    mockSessionBatchCommit.mockClear();
+    mockRoundsBatchSet.mockClear();
+    mockRoundsBatchCommit.mockClear();
   });
 
   it("returns a sessionId and inviteCode", async () => {
@@ -48,7 +57,7 @@ describe("createSession", () => {
     expect(result.inviteCode).toHaveLength(6);
   });
 
-  it("creates exactly 1 session + 1 player + 10 rounds in the batch", async () => {
+  it("creates 1 session + 1 player in batch 1 and 10 rounds in batch 2", async () => {
     await createSession({
       topic: "movies",
       year: 2024,
@@ -57,11 +66,13 @@ describe("createSession", () => {
       avatar: "seed-xyz",
     });
 
-    // 1 session + 1 player + 10 rounds = 12 batch.set calls
-    expect(mockSet).toHaveBeenCalledTimes(1 + 1 + MAX_ROUNDS);
+    // Batch 1: 1 session + 1 player
+    expect(mockSessionBatchSet).toHaveBeenCalledTimes(2);
+    // Batch 2: 10 rounds
+    expect(mockRoundsBatchSet).toHaveBeenCalledTimes(MAX_ROUNDS);
   });
 
-  it("commits the batch exactly once", async () => {
+  it("commits each batch exactly once", async () => {
     await createSession({
       topic: "books",
       year: 2023,
@@ -70,7 +81,8 @@ describe("createSession", () => {
       avatar: "seed-123",
     });
 
-    expect(mockCommit).toHaveBeenCalledTimes(1);
+    expect(mockSessionBatchCommit).toHaveBeenCalledTimes(1);
+    expect(mockRoundsBatchCommit).toHaveBeenCalledTimes(1);
   });
 
   it("sets session doc with correct topic and year", async () => {
@@ -82,7 +94,7 @@ describe("createSession", () => {
       avatar: "seed-abc",
     });
 
-    const sessionCall = (mockSet.mock.calls as unknown[][])[0];
+    const sessionCall = (mockSessionBatchSet.mock.calls as unknown[][])[0];
     const sessionData = sessionCall?.[1] as unknown as Record<string, unknown>;
 
     expect(sessionData.topic).toBe("games");
@@ -103,7 +115,7 @@ describe("createSession", () => {
       avatar: "seed-abc",
     });
 
-    const playerCall = (mockSet.mock.calls as unknown[][])[1];
+    const playerCall = (mockSessionBatchSet.mock.calls as unknown[][])[1];
     const playerData = playerCall?.[1] as unknown as Record<string, unknown>;
 
     expect(playerData.name).toBe("Ryan");
@@ -121,9 +133,9 @@ describe("createSession", () => {
       avatar: "seed-abc",
     });
 
-    // Rounds are calls index 2..11 (after session + player)
+    // Rounds are in the second batch
     for (let i = 0; i < MAX_ROUNDS; i++) {
-      const roundCall = (mockSet.mock.calls as unknown[][])[2 + i];
+      const roundCall = (mockRoundsBatchSet.mock.calls as unknown[][])[i];
       const roundData = roundCall?.[1] as unknown as Record<string, unknown>;
 
       expect(roundData.number).toBe(i + 1);

@@ -26,12 +26,15 @@ service cloud.firestore {
     match /sessions/{sessionId} {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated();
-      allow update: if isHost(sessionId);
+      allow update: if isHost(sessionId)
+        || (isAuthenticated()
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["playerCount"])
+            && request.resource.data.playerCount == resource.data.playerCount + 1);
       allow delete: if isHost(sessionId);
 
       // --- Players ---
       match /players/{uid} {
-        allow read: if isPlayer(sessionId);
+        allow read: if isPlayer(sessionId) || isOwner(uid);
         allow create: if isOwner(uid);
         allow update: if isOwner(uid);
         allow delete: if isHost(sessionId);
