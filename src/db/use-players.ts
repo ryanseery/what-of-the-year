@@ -1,6 +1,7 @@
 import { onSnapshot, orderBy, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
+import { auth } from "./config";
 import { playersRef } from "db/collections";
 import type { Player } from "db/types";
 
@@ -47,5 +48,8 @@ export function usePlayers(sessionId: string | undefined) {
     return unsubscribe;
   }, [sessionId]);
 
-  return { players, isLoading, error };
+  const currentUid = auth.currentUser?.uid;
+  const isHost = players.some((p) => p.uid === currentUid && p.isHost);
+
+  return { players, isHost, isLoading, error };
 }

@@ -1,4 +1,7 @@
+import { tintColor } from "./tintColor";
 import type { Theme } from "./types";
+
+const PRIMARY = "#000000";
 
 const baseSpacing = {
   sm: 8,
@@ -21,7 +24,7 @@ const baseBorder = {
 
 const baseText = {
   color: {
-    primary: "#000000",
+    primary: PRIMARY,
     secondary: "#666666",
   },
   size: {
@@ -65,7 +68,7 @@ const baseCollections = {
 export const gamesTheme: Theme = {
   ...baseCollections,
   colors: {
-    primary: "#000000",
+    primary: PRIMARY,
     ...baseColors,
   },
 };
@@ -73,7 +76,7 @@ export const gamesTheme: Theme = {
 export const moviesTheme: Theme = {
   ...baseCollections,
   colors: {
-    primary: "#3B82F6",
+    primary: tintColor(PRIMARY, "#3B82F6", 0.3),
     ...baseColors,
   },
 };
@@ -81,7 +84,7 @@ export const moviesTheme: Theme = {
 export const booksTheme: Theme = {
   ...baseCollections,
   colors: {
-    primary: "#3bf673",
+    primary: tintColor(PRIMARY, "#3bf673", 0.3),
     ...baseColors,
   },
 };

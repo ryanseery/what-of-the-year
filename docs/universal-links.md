@@ -1,6 +1,6 @@
 # Universal Links Setup
 
-Universal links allow shared invite URLs (e.g. `https://whatoftheyear.com/movies/2025?session=abc123`) to open directly in the app instead of the browser.
+Universal links allow shared invite URLs (e.g. `https://whatoftheyear.com/movies/2025/abc123`) to open directly in the app instead of the browser.
 
 ## 1. Update `app.json`
 
@@ -94,7 +94,7 @@ Once universal links are configured, update the share function in the lobby to u
 
 ```ts
 const onShareInvite = async () => {
-  const url = `https://whatoftheyear.com/${topic.key}/${year}?session=${sessionId}`;
+  const url = `https://whatoftheyear.com/${topic.key}/${year}/${sessionId}`;
 
   await Share.share({
     message: `Join my ${topic.label} of ${year} game!\n${url}`,
@@ -117,5 +117,5 @@ eas build --profile development
 - **Apple validator:** https://search.developer.apple.com/appsearch-validation-tool/
 - **Google validator:**
   ```sh
-  adb shell am start -a android.intent.action.VIEW -d "https://whatoftheyear.com/movies/2025?session=test"
+  adb shell am start -a android.intent.action.VIEW -d "https://whatoftheyear.com/movies/2025/test123"
   ```

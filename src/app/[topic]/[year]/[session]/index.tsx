@@ -5,7 +5,6 @@ import { Avatar } from "components/avatar";
 import { Button } from "components/button";
 import { Error } from "components/error";
 import { Loading } from "components/loading";
-import { auth } from "db/config";
 import { usePlayers } from "db/use-players";
 import { useSession } from "db/use-session";
 import { useParams } from "hooks/use-params";
@@ -15,10 +14,7 @@ export default function Lobby() {
   const s = useStyles();
   const { topic, year, session: sessionId } = useParams();
   const { session, isLoading: sessionLoading, error: sessionError } = useSession(sessionId);
-  const { players, isLoading: playersLoading, error: playersError } = usePlayers(sessionId);
-
-  const currentUid = auth.currentUser?.uid;
-  const isHost = players.some((p) => p.uid === currentUid && p.isHost);
+  const { players, isHost, isLoading: playersLoading, error: playersError } = usePlayers(sessionId);
 
   if (sessionLoading || playersLoading) return <Loading />;
   if (sessionError || playersError) return <Error />;

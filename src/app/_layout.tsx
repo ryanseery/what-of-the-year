@@ -25,7 +25,10 @@ export default function Root() {
       <ThemeProvider>
         <WebContainer>
           <Stack
-            screenOptions={{ headerBackButtonDisplayMode: "minimal", headerShadowVisible: false }}
+            screenOptions={{
+              headerBackButtonDisplayMode: "minimal",
+              headerShadowVisible: false,
+            }}
           >
             <Stack.Screen name="index" options={{ headerShown: false }} />
             <Stack.Screen
