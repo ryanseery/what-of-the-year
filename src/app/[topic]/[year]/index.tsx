@@ -12,6 +12,7 @@ import { createSession } from "db/create-session";
 import { joinSession } from "db/join-session";
 import { useAuth } from "db/use-auth";
 import { useParams } from "hooks/use-params";
+import { useRandomAvatar } from "hooks/use-random-avatar";
 import { useTopicData } from "queries/use-topic-data";
 import { createStyles } from "utils/theme";
 
@@ -19,18 +20,13 @@ export default function Topic() {
   const s = useStyles();
   const headerHeight = useHeaderHeight();
   const { topic, year, session: existingSessionId } = useParams();
-  const [avatarSeed, setAvatarSeed] = useState("default");
+  const { isLoading, isError, refetch } = useTopicData({ key: topic.value, year: year! });
+  const { avatar, randomizeAvatar } = useRandomAvatar();
   const [name, setName] = useState("");
   const { mutateAsync: signIn, isPending } = useAuth();
 
-  const { isLoading, isError, refetch } = useTopicData({ key: topic.value, year: year! });
-
-  const source = `https://api.dicebear.com/7.x/bottts/svg?seed=${avatarSeed}`;
-
   const isJoining = !!existingSessionId;
   const disabled = isLoading || isPending || name.length < 1;
-
-  const randomizeAvatar = () => setAvatarSeed(Math.random().toString(36).substring(7));
 
   const onSubmit = async () => {
     try {
@@ -44,7 +40,7 @@ export default function Topic() {
             sessionId: existingSessionId,
             uid: user.uid,
             name,
-            avatar: source,
+            avatar,
           });
         } catch (e: unknown) {
           const error = e as Error;
@@ -57,7 +53,7 @@ export default function Topic() {
           year: Number(year),
           uid: user.uid,
           name,
-          avatar: source,
+          avatar,
         });
         sessionId = result.sessionId;
       }
@@ -82,7 +78,7 @@ export default function Topic() {
     <KeyboardAvoidingView style={s.root} keyboardVerticalOffset={headerHeight}>
       <View style={[s.container, { marginTop: -headerHeight / 2 }]}>
         <View style={s.avatar}>
-          <Avatar source={source} size={120} />
+          <Avatar source={avatar} size={120} />
           <Button style={s.btn} label="Random" onPress={randomizeAvatar} />
         </View>
         <Input placeholder="User name" value={name} onChangeText={onChangeText} />

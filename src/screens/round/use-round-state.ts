@@ -1,0 +1,47 @@
+import { router } from "expo-router";
+import { useEffect } from "react";
+
+import { Topic } from "constants/topics";
+import { usePlayers } from "db/use-players";
+import { useRound } from "db/use-round";
+import { useSelections } from "db/use-selections";
+import { useSession } from "db/use-session";
+
+interface Props {
+  sessionId: string;
+  roundNumber: number;
+  topic: Topic;
+  year: string;
+}
+export function useRoundState({ sessionId, roundNumber, topic, year }: Props) {
+  const { session, isLoading: sessionLoading, error: sessionError } = useSession(sessionId);
+  const { round, isLoading: roundLoading, error: roundError } = useRound(sessionId, roundNumber);
+  const { players, isHost, isLoading: playersLoading, error: playersError } = usePlayers(sessionId);
+  const {
+    selections,
+    isLoading: selectionsLoading,
+    error: selectionsError,
+  } = useSelections(sessionId, roundNumber);
+
+  const isLoading = sessionLoading || roundLoading || playersLoading || selectionsLoading;
+  const error = sessionError || roundError || playersError || selectionsError;
+
+  // Sync URL with session.activeRoundNumber
+  useEffect(() => {
+    if (session && roundNumber && session.activeRoundNumber !== roundNumber) {
+      router.replace({
+        pathname: "/[topic]/[year]/[session]/[round]",
+        params: {
+          topic: topic.value,
+          year,
+          session: sessionId!,
+          round: String(session.activeRoundNumber),
+        },
+      });
+    }
+  }, [session?.activeRoundNumber, roundNumber, topic.value, year, sessionId]);
+
+  const completedUids = new Set(selections.map((s) => s.uid));
+
+  return { isLoading, error, session, round, completedUids, players, isHost };
+}

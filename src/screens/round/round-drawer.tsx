@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import { Modal, Pressable, Text, View } from "react-native";
 
-import { PlayerList } from "./player-list";
+import { PlayerList } from "../../components/player-list";
 import { Button } from "components/button";
 import { advanceRound } from "db/advance-round";
 import type { PlayerWithId } from "db/use-players";
@@ -95,8 +95,6 @@ const useStyles = createStyles((t) => ({
     alignItems: "center",
     justifyContent: "space-between",
     padding: t.spacing.lg,
-    borderBottomWidth: 1,
-    borderBottomColor: t.colors.surface,
   },
   title: {
     fontSize: t.text.size.xl,
@@ -108,6 +106,7 @@ const useStyles = createStyles((t) => ({
     color: t.text.color.secondary,
   },
   footer: {
+    paddingTop: t.spacing.lg,
     paddingHorizontal: t.spacing.lg,
     gap: t.spacing.md,
   },
