@@ -51,15 +51,6 @@ export default function Root() {
                 };
               }}
             />
-            <Stack.Screen
-              name="[topic]/[year]/[session]/[round]"
-              options={({ route }) => {
-                const params = route.params as Params;
-                return {
-                  title: `Round ${params?.round}`,
-                };
-              }}
-            />
           </Stack>
         </WebContainer>
       </ThemeProvider>

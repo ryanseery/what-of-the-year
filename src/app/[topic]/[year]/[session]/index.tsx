@@ -1,10 +1,13 @@
 import * as Linking from "expo-linking";
-import { FlatList, Share, Text, View } from "react-native";
+import { router } from "expo-router";
+import { useEffect } from "react";
+import { Share, View } from "react-native";
 
-import { Avatar } from "components/avatar";
 import { Button } from "components/button";
 import { Error } from "components/error";
 import { Loading } from "components/loading";
+import { PlayerList } from "components/player-list";
+import { startSession } from "db/start-session";
 import { usePlayers } from "db/use-players";
 import { useSession } from "db/use-session";
 import { useParams } from "hooks/use-params";
@@ -16,9 +19,21 @@ export default function Lobby() {
   const { session, isLoading: sessionLoading, error: sessionError } = useSession(sessionId);
   const { players, isHost, isLoading: playersLoading, error: playersError } = usePlayers(sessionId);
 
-  if (sessionLoading || playersLoading) return <Loading />;
-  if (sessionError || playersError) return <Error />;
-  if (!session) return <Error />;
+  const loading = sessionLoading || playersLoading;
+  const error = sessionError || playersError;
+
+  // Auto-navigate non-host players when game starts
+  useEffect(() => {
+    if (!loading && !error && session && !session.isOpen && !isHost) {
+      router.replace({
+        pathname: "/[topic]/[year]/[session]/[round]",
+        params: { topic: topic.value, year: year!, session: sessionId!, round: "1" },
+      });
+    }
+  }, [session?.isOpen, isHost, loading, error, topic.value, year, sessionId]);
+
+  if (loading) return <Loading />;
+  if (error || !session) return <Error />;
 
   const onShareInvite = async () => {
     const url = Linking.createURL(`/${topic.value}/${year}`, {
@@ -30,8 +45,12 @@ export default function Lobby() {
     });
   };
 
-  const onStartGame = () => {
-    // TODO: start game — close session + navigate to round 1
+  const onStartGame = async () => {
+    await startSession({ sessionId: sessionId! });
+    router.replace({
+      pathname: "/[topic]/[year]/[session]/[round]",
+      params: { topic: topic.value, year: year!, session: sessionId!, round: "1" },
+    });
   };
 
   const disabled = players.length < 2;
@@ -42,23 +61,7 @@ export default function Lobby() {
         <Button style={s.shareBtn} label="Share Invite" onPress={onShareInvite} />
       </View>
 
-      <FlatList
-        data={players}
-        keyExtractor={(item) => item.uid}
-        contentContainerStyle={s.list}
-        renderItem={({ item }) => (
-          <View style={s.playerRow}>
-            <Avatar source={item.avatar} size={48} />
-            <Text style={s.playerName}>{item.name}</Text>
-            {item.isHost && <Text style={s.hostBadge}>Host</Text>}
-          </View>
-        )}
-        ListFooterComponent={
-          <Text style={s.count}>
-            {players.length} / {session.maxPlayers} players
-          </Text>
-        }
-      />
+      <PlayerList data={players} />
 
       {isHost && (
         <View style={s.footer}>
@@ -80,34 +83,6 @@ const useStyles = createStyles((t) => ({
   },
   shareBtn: {
     width: 200,
-  },
-  list: {
-    paddingHorizontal: t.spacing.md,
-    gap: t.spacing.sm,
-  },
-  playerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: t.colors.surface,
-    padding: t.spacing.sm,
-    borderRadius: t.border.radius.lg,
-    gap: t.spacing.md,
-  },
-  playerName: {
-    flex: 1,
-    fontSize: t.text.size.lg,
-    fontWeight: t.text.weight.medium,
-  },
-  hostBadge: {
-    fontSize: t.text.size.sm,
-    fontWeight: t.text.weight.semibold,
-    color: t.colors.primary,
-  },
-  count: {
-    textAlign: "center",
-    fontSize: t.text.size.sm,
-    color: t.text.color.secondary,
-    paddingTop: t.spacing.md,
   },
   footer: {
     padding: t.spacing.lg,

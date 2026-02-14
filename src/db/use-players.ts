@@ -6,7 +6,7 @@ import { playersRef } from "db/collections";
 import type { Player } from "db/types";
 
 /** A {@link Player} enriched with the Firestore document ID. */
-interface PlayerWithId extends Player {
+export interface PlayerWithId extends Player {
   uid: string;
 }
 

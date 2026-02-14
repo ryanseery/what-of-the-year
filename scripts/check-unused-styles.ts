@@ -24,9 +24,16 @@ function getAllFiles(dir: string, fileList: string[] = []): string[] {
 function checkUnusedStyles(filePath: string): string[] {
   const content = readFileSync(filePath, "utf-8");
 
-  // Find StyleSheet.create starting position
-  const createMatch = content.match(/StyleSheet\.create\s*\(\s*\{/);
+  // Find createStyles starting position - pattern: createStyles((t) => ({
+  const createMatch = content.match(/createStyles\s*\(\s*\([^)]*\)\s*=>\s*\(\s*\{/);
   if (!createMatch || !createMatch.index) return [];
+
+  // Find the variable name it's assigned to (e.g., "const s = useStyles()")
+  const varMatch = content
+    .slice(0, createMatch.index)
+    .match(/const\s+(\w+)\s*=\s*useStyles\s*\(\s*\)\s*;?\s*$/m);
+  if (!varMatch) return [];
+  const varName = varMatch[1];
 
   // Find matching closing brace
   let depth = 1;
@@ -63,12 +70,14 @@ function checkUnusedStyles(filePath: string): string[] {
   const unused: string[] = [];
 
   for (const styleName of styleNames) {
-    // Check if style is used outside StyleSheet.create
+    // Check if style is used outside createStyles
     const beforeStyleSheet = content.slice(0, createMatch.index);
     const afterStyleSheet = content.slice(i);
 
-    // Look for styles.styleName or styles[styleName]
-    const usageRegex = new RegExp(`styles\\.${styleName}|styles\\[['"\`]${styleName}['"\`]\\]`);
+    // Look for varName.styleName or varName[styleName] (e.g., s.root or s['root'])
+    const usageRegex = new RegExp(
+      `${varName}\\.${styleName}|${varName}\\[['"\`]${styleName}['"\`]\\]`,
+    );
     if (!usageRegex.test(beforeStyleSheet + afterStyleSheet)) {
       unused.push(styleName);
     }
