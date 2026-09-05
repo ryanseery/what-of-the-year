@@ -1,0 +1,31 @@
+name: Release
+
+# Keeps a standing release PR from Conventional Commits on main; merging it
+# bumps package.json, writes CHANGELOG.md, tags and cuts a GitHub release.
+# Configuration, validation model and required repo settings: docs/release.md.
+on:
+  push:
+    branches:
+      - main
+
+# One release run at a time, never cancelled — see docs/release.md.
+concurrency:
+  group: release-please
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # push the release branch, tag, create the GitHub release
+      pull-requests: write # open and groom the release PR
+
+    steps:
+      - name: Run release-please
+        uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
