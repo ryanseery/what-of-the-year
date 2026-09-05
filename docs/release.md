@@ -52,5 +52,5 @@ been made here.
 
 ## Generated files
 
-`CHANGELOG.md` is written by release-please and listed in `.oxignore`, so
-neither `oxfmt` nor `oxlint` touches it.
+`CHANGELOG.md` is written by release-please and listed in `ignorePatterns` in
+both `.oxfmtrc.json` and `.oxlintrc.json`, so neither tool touches it.

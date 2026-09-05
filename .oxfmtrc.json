@@ -1,4 +1,13 @@
 {
+  "ignorePatterns": [
+    ".github/**",
+    "README.md",
+    "CHANGELOG.md",
+    "convex/_generated/**",
+    "convex/convex.config.ts",
+    "src/routeTree.gen.ts",
+    "docs/**"
+  ],
   "sortImports": {
     "groups": [["builtin"], ["external"], ["internal"], ["parent", "sibling", "index"]],
     "newlinesBetween": true,

@@ -1,4 +1,13 @@
 {
+  "ignorePatterns": [
+    ".github/**",
+    "README.md",
+    "CHANGELOG.md",
+    "convex/_generated/**",
+    "convex/convex.config.ts",
+    "src/routeTree.gen.ts",
+    "docs/**"
+  ],
   "rules": {
     "jsx-a11y/alt-text": "error",
     "jsx-a11y/aria-props": "error",
