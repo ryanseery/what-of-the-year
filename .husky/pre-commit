@@ -1,16 +1,20 @@
 #!/bin/sh
 
 # Get staged TypeScript/JSON files (oxfmt) and the TypeScript subset (oxlint —
-# it exits 1 with "No files found to lint" when handed only json)
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(tsx?|json)$' || true)
-LINT_FILES=$(echo "$STAGED_FILES" | grep -E '\.tsx?$' || true)
+# it exits 1 with "No files found to lint" when handed only json). Explicit
+# paths bypass oxlint's --ignore-path, so .oxignore is applied here instead.
+STAGED_FILES=""
+for f in $(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(tsx?|json)$' || true); do
+  git -c core.excludesFile=.oxignore check-ignore -q --no-index "$f" || STAGED_FILES="$STAGED_FILES $f"
+done
+LINT_FILES=$(echo "$STAGED_FILES" | tr ' ' '\n' | grep -E '\.tsx?$' || true)
 
 if [ -n "$STAGED_FILES" ]; then
 
 # Format and lint staged files
 
-bunx oxfmt --no-error-on-unmatched-pattern $STAGED_FILES
-[ -n "$LINT_FILES" ] && bunx oxlint --fix $LINT_FILES
+bunx oxfmt --ignore-path .oxignore --no-error-on-unmatched-pattern $STAGED_FILES
+[ -n "$LINT_FILES" ] && bunx oxlint --ignore-path .oxignore --fix $LINT_FILES
 
 # Re-add formatted files
 

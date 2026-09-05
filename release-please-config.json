@@ -10,7 +10,6 @@
   "changelog-sections": [
     { "type": "feat", "section": "Features" },
     { "type": "fix", "section": "Bug Fixes" },
-    { "type": "chore", "section": "Chores" },
     { "type": "ci", "section": "CI" }
   ]
 }
