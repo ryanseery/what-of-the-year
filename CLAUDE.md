@@ -2,30 +2,29 @@
 
 Yearly-picks party game. Vite + React 19 + TanStack Router (file-based) + Convex backend + Tailwind 4. Runtime and package manager: bun.
 
-Detailed rules live in `.claude/rules/` and load when you touch matching files.
+Detailed rules live in `.claude/rules/` and load when you touch matching files. Cross-cutting changes should read both `convex.md` and `react.md`.
+
+Docs, read when relevant:
+
+- `docs/contributing.md`: branches, commits, PR process, what to disclose.
+- `docs/local-dev.md`: checks, e2e, the shared dev deployment, generated files.
+- `docs/release.md`: how releases are cut.
 
 ## Checks
 
-Run before pushing — CI enforces all four:
-
-```sh
-bun run check:format && bun run check:lint && bun run check:types && bun test
-```
-
-E2E: `bun run test:web` (Playwright, needs `.env.local`).
+CI enforces the four `check:*` / `test` scripts in `package.json`; run them before pushing. E2E is `bun run test:web` and needs `.env.local`.
 
 ## Invariants
 
-- **Disclose the unusual**: a new dependency, a CI or `.claude/` rules change, or a regenerated file gets its own line in the PR's **Notes for reviewer** saying why. A human reads every PR; make the surprising parts easy to find.
-- **Error handling in UI**: wrap every awaited Convex mutation/action call in `tryCatch` from `utils/try-catch`; on error, `Sentry.captureException(error)`, surface `error.message` via `useToast`, then early-return. Navigate/update state only on success. Never bare try/catch, never fire-and-forget mutations.
+- **Disclose the unusual**: a new dependency, a `.github/` or `.claude/` change, or a regenerated file gets its own line in the PR's **Notes for reviewer** saying why.
+- **Error handling in UI**: wrap every awaited Convex mutation/action call in `tryCatch` from `utils/try-catch`; on error, `Sentry.captureException(error)`, surface `error.message` via `useToast`, then early-return. Navigate/update state only on success. Never bare try/catch, never fire-and-forget mutations. The one exception is anonymous sign-in, where nothing can render without an identity, so the error state replaces the toast.
 - Import Sentry as a namespace (`import * as Sentry from "@sentry/react"`); it is initialized only in `services/sentry`.
 - Server-side authz **throws** — see `.claude/rules/convex.md` for the contract and the single exception.
+- The server's `session.status` decides which screen renders. Clients never navigate between game phases.
 
 ## Git
 
-- Conventional Commits: `type(scope): summary`, type ∈ `feat|fix|chore|ci`. The scope is the area touched (`convex`, `lobby`, `round`, `ci`, `deps`, `rules`), never the author or the issue number. PR titles follow the same format.
-- Branches: human work `seery/<topic>`, agent work `agent/<issue#>-<slug>`. Provenance lives in the branch name and the `Co-Authored-By` trailer, not the commit scope.
-- Rebase onto the PR's base before pushing for review. `git log --oneline <base>..HEAD` shows only this PR's commits.
-- PRs fill every section of `.github/pull_request_template.md` (Summary / Changes / Verification / Notes for reviewer) and merge to `main` via squash or rebase only.
+- `type(scope): summary`, type ∈ `feat|fix|chore|ci`, scope = area touched. PR titles too.
+- Branches: `seery/<topic>` for human work, `agent/<issue#>-<slug>` for agent work.
+- Fill every section of the PR template. `Closes #<issue>` goes in the PR **description**, one line per ticket.
 - Never add a `Claude-Session` trailer to commits or a session link to PR bodies.
-- Every PR that resolves a ticket carries `Closes #<issue>` in its **description** (not just a commit message — squash/rebase merges make the body keyword the reliable auto-close path). One line per ticket if a PR resolves several.
