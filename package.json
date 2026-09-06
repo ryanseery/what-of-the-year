@@ -12,10 +12,13 @@
     "check:lint": "oxlint .",
     "check:types": "bunx tsc --noEmit",
     "convex:dev": "bunx convex dev",
+    "backend:up": "scripts/backend-up.sh",
+    "backend:reset": "scripts/backend-up.sh --reset",
     "test": "bun test",
     "test:watch": "bun test --watch",
-    "test:web": "set -a && source .env.local && set +a && bunx playwright test",
-    "test:web:ui": "set -a && source .env.local && set +a && bunx playwright test --ui",
+    "test:web": "scripts/e2e.sh",
+    "test:web:ui": "scripts/e2e.sh --ui",
+    "gate": "bun run check:format && bun run check:lint && bun run check:types && bun run test && bun run test:web",
     "prepare": "husky"
   },
   "dependencies": {

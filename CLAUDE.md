@@ -12,7 +12,7 @@ Docs, read when relevant:
 
 ## Checks
 
-CI enforces the four `check:*` / `test` scripts in `package.json`; run them before pushing. E2E is `bun run test:web` and needs `.env.local`.
+`bun run gate` before pushing: the four `check:*` / `test` scripts CI enforces, then `test:web`. E2E needs a backend — the cloud dev deployment in `.env.local`, or `bun run backend:up` for a local one (`docs/local-dev.md`).
 
 ## Invariants
 

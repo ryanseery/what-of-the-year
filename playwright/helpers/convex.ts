@@ -1,4 +1,7 @@
-const siteUrl = process.env.CONVEX_SITE_URL ?? "";
+// CI and the cloud dev deployment set CONVEX_SITE_URL; the local backend writes
+// VITE_CONVEX_SITE_URL into .env.local itself, and the Convex CLI stops
+// maintaining that file if we add a second spelling to it.
+const siteUrl = process.env.CONVEX_SITE_URL ?? process.env.VITE_CONVEX_SITE_URL ?? "";
 const testSecret = process.env.TEST_SECRET ?? "";
 
 const HEADERS = {

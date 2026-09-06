@@ -26,8 +26,8 @@ section (see `release.md`).
 
 - Rebase onto the PR's base. `git log --oneline <base>..HEAD` must show only
   this PR's commits.
-- Run the four checks and, for anything touching the app, the e2e suite (see
-  `local-dev.md`). CI enforces the checks; say in the PR what you ran.
+- Run `bun run gate` — the four checks then the e2e suite, in one command (see
+  `local-dev.md`). CI enforces the same set; say in the PR what you ran.
 - Fill every section of `.github/pull_request_template.md`: Summary, Changes,
   Verification, Notes for reviewer. A human reads every PR; the template exists
   so the surprising parts are easy to find.
