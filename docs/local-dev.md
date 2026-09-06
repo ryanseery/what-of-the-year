@@ -12,11 +12,16 @@ from the code.
 | --- | --- |
 | `.husky/pre-commit` | format + lint on staged files, then `check:types` |
 | `ci.yml` `checks` job | all four, on every PR and merge-queue run |
-| you | `bun run check:format && bun run check:lint && bun run check:types && bun test` |
+| you | `bun run check:format && bun run check:lint && bun run check:types && bun run test` |
 
 Ignore lists live in `.oxfmtrc.json` and `.oxlintrc.json` (`ignorePatterns`,
 one per tool, which is what oxc's docs recommend; there is no shared file).
 `docs/**` is ignored by both.
+
+`test` runs with `--coverage`, which prints the per-file table. The floor that
+turns a coverage drop into a failure is the `[test] coverageThreshold` in
+`bunfig.toml`, set just under the real number so it ratchets up rather than
+blocking. Run `bun run test`, not bare `bun test`, or the floor is skipped.
 
 ## E2E
 
@@ -27,9 +32,10 @@ in `playwright/helpers/convex.ts`, never through the UI.
 
 Two settings in `playwright.config.ts` matter when reading results:
 
-- `retries: 1` locally. A spec that fails once and passes on retry is reported
-  as **flaky**, and the run is green. Use `--retries 0` to see the real
-  failure rate, or read the "flaky" line rather than the exit code.
+- `retries: 1` locally, `0` in CI. Locally a spec that fails once and passes on
+  retry is reported as **flaky** and the run is green, so read the "flaky" line
+  rather than the exit code (or use `--retries 0` for the real failure rate).
+  In CI that same spec is a plain failure and fails the job.
 - `reuseExistingServer` locally, so a dev server you already have on `:5173`
   is used as is.
 
