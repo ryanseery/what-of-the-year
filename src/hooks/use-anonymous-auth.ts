@@ -2,9 +2,7 @@ import { useAuthActions } from "@convex-dev/auth/react";
 import * as Sentry from "@sentry/react";
 import { useEffect, useRef, useState } from "react";
 
-import { useToast } from "components/toast";
 import { useConvexAuth } from "convex/react";
-import { getApiError } from "utils/api-error";
 import { tryCatch } from "utils/try-catch";
 
 /**
@@ -20,7 +18,6 @@ import { tryCatch } from "utils/try-catch";
 export function useAnonymousAuth() {
   const { isAuthenticated, isLoading } = useConvexAuth();
   const { signIn } = useAuthActions();
-  const { show } = useToast();
   const inFlight = useRef(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -31,9 +28,10 @@ export function useAnonymousAuth() {
     const authenticate = async () => {
       const { error } = await tryCatch(signIn("anonymous"));
       inFlight.current = false;
+      // No toast: nothing under the layout can render without an identity, so
+      // the caller shows the error state, as the root boundary does for queries.
       if (error) {
         Sentry.captureException(error);
-        show({ variant: "error", message: getApiError(error).message });
         setError(error);
       }
     };
