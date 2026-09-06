@@ -1,0 +1,5 @@
+[test]
+# Coverage floor, set just under the numbers at the time of writing (87.84%
+# functions / 89.66% lines) so it ratchets as coverage rises instead of
+# blocking work today. Raise it when a PR moves the real number up.
+coverageThreshold = { function = 0.87, line = 0.89 }

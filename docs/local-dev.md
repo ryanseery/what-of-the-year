@@ -23,8 +23,9 @@ fails the run like an error. Fix it or downgrade the rule deliberately in
 `.oxlintrc.json`; do not pass the flag off.
 
 `test` runs with `--coverage`, which prints the per-file table. The floor that
-turns a coverage drop into a failure is a `[test] coverageThreshold` in
-`bunfig.toml`; that file is not committed yet (#86).
+turns a coverage drop into a failure is the `[test] coverageThreshold` in
+`bunfig.toml`, set just under the real number so it ratchets up rather than
+blocking. Run `bun run test`, not bare `bun test`, or the floor is skipped.
 
 ## E2E
 
