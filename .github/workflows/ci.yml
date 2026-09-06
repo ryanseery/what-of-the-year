@@ -55,6 +55,9 @@ jobs:
       - name: Run unit tests
         run: bun test
 
+  # `needs: checks` is deliberate: a red lint/type/unit run means another push
+  # is coming anyway, so an e2e run against that commit is wasted minutes. The
+  # serial cost is accepted; do not parallelise these.
   e2e:
     needs: checks
     runs-on: ubuntu-latest
@@ -62,9 +65,21 @@ jobs:
     permissions:
       contents: read
 
+    env:
+      # Pinned by digest; referenced twice below (prefetch, then run).
+      CONVEX_BACKEND_IMAGE: ghcr.io/get-convex/convex-backend@sha256:1f2044e3eac463ac78973b136c0baf72d4ada602611d853d6f99f280e29e0a98
+
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      # ~7s of the run is the backend image pull. Start it in the background so
+      # it overlaps the restores and the build below; the start step still pulls
+      # authoritatively (dockerd coalesces the in-flight layers), so a failed
+      # prefetch costs nothing but the overlap.
+      - name: Prefetch Convex backend image
+        run: |
+          nohup docker pull "$CONVEX_BACKEND_IMAGE" >/tmp/convex-pull.log 2>&1 &
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
@@ -92,8 +107,16 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: bunx playwright install chromium
 
-      - name: Install Playwright system dependencies
-        run: bunx playwright install-deps chromium
+      # No `playwright install-deps`: every library chromium links against is
+      # already in the ubuntu-latest image (the step only ever added CJK/Cyrillic
+      # fonts nothing here renders) and it cost ~12s of apt every run. If a future
+      # image drops one, Playwright fails to launch with an explicit "Host system
+      # is missing dependencies" error naming this command as the fix.
+
+      # The build needs nothing from the backend, so it runs first and covers the
+      # tail of the image prefetch above.
+      - name: Build frontend
+        run: VITE_CONVEX_URL=http://127.0.0.1:3210 bun run build
 
       # Hermetic backend: a throwaway local Convex instance, ephemeral credentials,
       # fixture option sources. No cloud, no repo secrets — runs identically for
@@ -109,7 +132,7 @@ jobs:
             -e CONVEX_CLOUD_ORIGIN=http://127.0.0.1:3210 \
             -e CONVEX_SITE_ORIGIN=http://127.0.0.1:3211 \
             -e DISABLE_BEACON=true \
-            ghcr.io/get-convex/convex-backend@sha256:1f2044e3eac463ac78973b136c0baf72d4ada602611d853d6f99f280e29e0a98
+            "$CONVEX_BACKEND_IMAGE"
           for i in $(seq 1 60); do
             curl -fsS http://127.0.0.1:3210/version >/dev/null 2>&1 && exit 0
             sleep 1
@@ -137,9 +160,6 @@ jobs:
           bunx convex env set OPTIONS_FIXTURES 1
           cat /tmp/jwt-private-key.txt | bunx convex env set JWT_PRIVATE_KEY
           bunx convex env set JWKS "$(cat /tmp/jwks.json)"
-
-      - name: Build frontend
-        run: VITE_CONVEX_URL=http://127.0.0.1:3210 bun run build
 
       - name: Run Playwright tests
         env:
@@ -174,7 +194,9 @@ jobs:
 
       - name: Dump backend logs on failure
         if: failure()
-        run: docker logs convex-backend
+        # The build runs before the backend starts, so a build failure reaches
+        # here with no container; don't add a second red step for that.
+        run: docker logs convex-backend || true
 
       - name: Upload test artifacts
         if: ${{ !cancelled() }}
