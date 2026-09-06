@@ -55,9 +55,11 @@ jobs:
       - name: Run unit tests
         run: bun test
 
-  # Deliberately not `needs: checks` — the two jobs are independent, and
-  # serialising them added the whole lint/types/unit run to time-to-merge.
+  # `needs: checks` is deliberate: a red lint/type/unit run means another push
+  # is coming anyway, so an e2e run against that commit is wasted minutes. The
+  # serial cost is accepted; do not parallelise these.
   e2e:
+    needs: checks
     runs-on: ubuntu-latest
 
     permissions:
