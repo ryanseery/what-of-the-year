@@ -40,9 +40,17 @@ been made here.
 
 ## Repo settings the workflow depends on
 
-- **Settings > Actions > General > "Allow GitHub Actions to create and approve
-  pull requests"** must be enabled, or `GITHUB_TOKEN` cannot open the release
-  PR at all.
+Both of these were missing when #152 merged; every Release run failed at
+startup until they were set.
+
+- **Actions allowlist.** The repo allows only selected actions, so
+  `googleapis/release-please-action@*` must be on the list (Settings > Actions >
+  General > "Allow select actions"). Without it the run dies before any job
+  starts with "is not allowed in 30somethinggames/what-of-the-year".
+- **"Allow GitHub Actions to create and approve pull requests"** must be on at
+  the **org** level first (org Settings > Actions > General > Workflow
+  permissions) and then on the repo, or `GITHUB_TOKEN` cannot open the release
+  PR at all. The repo toggle returns `409` while the org one is off.
 - The workflow's job permissions are `contents: write` (push the release
   branch, tag, create the release) and `pull-requests: write` (open and groom
   the release PR). Top-level permissions are empty.
