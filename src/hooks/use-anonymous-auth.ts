@@ -28,8 +28,6 @@ export function useAnonymousAuth() {
     const authenticate = async () => {
       const { error } = await tryCatch(signIn("anonymous"));
       inFlight.current = false;
-      // No toast: nothing under the layout can render without an identity, so
-      // the caller shows the error state, as the root boundary does for queries.
       if (error) {
         Sentry.captureException(error);
         setError(error);
