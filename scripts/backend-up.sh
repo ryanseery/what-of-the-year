@@ -81,7 +81,11 @@ vars=$scratch/env-vars
 # Creates the deployment, downloads the backend binary, pins the port pair and
 # writes the URLs to .env.local. Only `convex dev` can do this — `convex env`
 # needs a deployment that already exists. Later runs reuse the saved ports.
-if [ ! -f .convex/local/default/config.json ]; then
+# Both halves have to be present: `.convex/` state without an `.env.local`
+# naming it (the file was deleted, or the checkout was copied) leaves `convex
+# env` with no deployment to talk to.
+if [ ! -f .convex/local/default/config.json ] \
+  || ! grep -qE '^CONVEX_DEPLOYMENT=anonymous:' "$ENV_FILE" 2>/dev/null; then
   claim_ports 3210 2
   bunx convex dev --once --tail-logs disable \
     --local-cloud-port "$claimed_port" --local-site-port "$((claimed_port + 1))"
