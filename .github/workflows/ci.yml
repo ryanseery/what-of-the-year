@@ -20,6 +20,8 @@ concurrency:
 jobs:
   checks:
     runs-on: ubuntu-latest
+    # Runs in ~2 min; anything near this is hung, not slow.
+    timeout-minutes: 10
 
     permissions:
       contents: read
@@ -53,7 +55,7 @@ jobs:
         run: bun run check:types
 
       - name: Run unit tests
-        run: bun test
+        run: bun run test
 
   # `needs: checks` is deliberate: a red lint/type/unit run means another push
   # is coming anyway, so an e2e run against that commit is wasted minutes. The
@@ -61,6 +63,9 @@ jobs:
   e2e:
     needs: checks
     runs-on: ubuntu-latest
+    # Backend pull, deploy and the suite land around 5 min; 15 leaves room for a
+    # slow runner without waiting out the 6-hour default on a wedged container.
+    timeout-minutes: 15
 
     permissions:
       contents: read
