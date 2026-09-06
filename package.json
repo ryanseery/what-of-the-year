@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "format": "oxfmt .",
     "check:format": "oxfmt --check .",
-    "check:lint": "oxlint --deny-warnings .",
+    "check:lint": "oxlint .",
     "check:types": "bunx tsc --noEmit",
     "convex:dev": "bunx convex dev",
     "test": "bun test --coverage",

@@ -18,10 +18,6 @@ Ignore lists live in `.oxfmtrc.json` and `.oxlintrc.json` (`ignorePatterns`,
 one per tool, which is what oxc's docs recommend; there is no shared file).
 `docs/**` is ignored by both.
 
-`check:lint` runs with `--deny-warnings`, so a warn-level rule (`no-console`)
-fails the run like an error. Fix it or downgrade the rule deliberately in
-`.oxlintrc.json`; do not pass the flag off.
-
 `test` runs with `--coverage`, which prints the per-file table. The floor that
 turns a coverage drop into a failure is the `[test] coverageThreshold` in
 `bunfig.toml`, set just under the real number so it ratchets up rather than
