@@ -1,42 +1,45 @@
 import { useAuthActions } from "@convex-dev/auth/react";
 import * as Sentry from "@sentry/react";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useToast } from "components/toast";
 import { useConvexAuth } from "convex/react";
 import { getApiError } from "utils/api-error";
-import { singleFlight } from "utils/single-flight";
 import { tryCatch } from "utils/try-catch";
 
 /**
- * Module scope, not a ref: a second `signIn("anonymous")` mints a second user
- * whose token replaces the first, so any row already written under the first
- * identity (the host's `players` row) belongs to a stranger. The guard has to
- * outlive the component — StrictMode double-invokes the effect on mount, and
- * navigating out of the layout and back remounts it while the call is in flight.
+ * Signs the visitor in anonymously when no session exists.
+ *
+ * `signIn("anonymous")` mints a new user on every call, and a second token
+ * replaces the first — so the effect must never start a second sign-in while
+ * one is in flight. StrictMode's simulated remount re-runs the effect on the
+ * same instance, so a ref is enough to catch it. Callers gate rendering on
+ * `isAuthenticated`, which is what keeps every write behind the settled
+ * identity.
  */
-const signInOnce = singleFlight();
-
-/** Signs the visitor in anonymously, exactly once per page load. */
 export function useAnonymousAuth() {
   const { isAuthenticated, isLoading } = useConvexAuth();
   const { signIn } = useAuthActions();
   const { show } = useToast();
+  const inFlight = useRef(false);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (isAuthenticated || isLoading) return;
+    if (isAuthenticated || isLoading || error || inFlight.current) return;
 
+    inFlight.current = true;
     const authenticate = async () => {
-      const { error } = await tryCatch(signInOnce(() => signIn("anonymous")));
+      const { error } = await tryCatch(signIn("anonymous"));
+      inFlight.current = false;
       if (error) {
         Sentry.captureException(error);
         show({ variant: "error", message: getApiError(error).message });
-        return;
+        setError(error);
       }
     };
 
     void authenticate();
-  }, [isAuthenticated, isLoading]);
+  }, [isAuthenticated, isLoading, error]);
 
-  return { isAuthenticated };
+  return { isAuthenticated, error };
 }
