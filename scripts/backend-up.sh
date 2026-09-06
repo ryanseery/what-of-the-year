@@ -26,17 +26,27 @@ read_env() {
   grep -E "^$1=" "$ENV_FILE" | tail -1 | cut -d= -f2- || true
 }
 
+# --reset deletes $ENV_FILE, so both keys that can name a backend have to be
+# clear before we get there: a file carrying only VITE_CONVEX_URL still points
+# a client at the cloud, and still holds the reader's TEST_SECRET.
+cloud=
 deployment=$(read_env CONVEX_DEPLOYMENT)
 deployment=${deployment%%[[:space:]]#*} # the CLI writes a trailing "# team: …" comment
 case "$deployment" in
   "" | anonymous:*) ;;
-  *)
-    echo "$ENV_FILE points at $deployment, not a local backend." >&2
-    echo "Remove CONVEX_DEPLOYMENT/VITE_CONVEX_URL from $ENV_FILE and re-run," >&2
-    echo "or keep using that deployment and skip this script." >&2
-    exit 1
-    ;;
+  *) cloud=$deployment ;;
 esac
+convex_url=$(read_env VITE_CONVEX_URL)
+case "$convex_url" in
+  "" | http://127.0.0.1:* | http://localhost:* | "http://[::1]:"*) ;;
+  *) cloud=${cloud:-$convex_url} ;;
+esac
+if [ -n "$cloud" ]; then
+  echo "$ENV_FILE points at $cloud, not a local backend." >&2
+  echo "Remove CONVEX_DEPLOYMENT/VITE_CONVEX_URL from $ENV_FILE and re-run," >&2
+  echo "or keep using that deployment and skip this script." >&2
+  exit 1
+fi
 
 if [ "${1:-}" = "--reset" ]; then
   rm -rf .convex "$ENV_FILE"
@@ -48,49 +58,33 @@ fi
 test_secret=$(read_env TEST_SECRET)
 [ -n "$test_secret" ] || test_secret=$(openssl rand -hex 32)
 
-# Same ephemeral RS256 keypair the CI job mints. Rotating it just forces a new
-# anonymous sign-in.
-bun scripts/generate-test-keys.mjs
+# Templated, because BSD mktemp ignores TMPDIR without one.
+scratch=$(mktemp -d "${TMPDIR:-/tmp}/woty-backend.XXXXXX")
+trap 'rm -rf "$scratch"' EXIT
 
-vars=$(mktemp)
-trap 'rm -f "$vars"' EXIT
+# Same ephemeral RS256 keypair the CI job mints. Rotating it just forces a new
+# anonymous sign-in. Written to our own directory, not a fixed global path, so
+# a second checkout minting its own pair mid-run cannot leave us with a private
+# key and a JWKS from different keypairs.
+bun scripts/generate-test-keys.mjs "$scratch"
+
+vars=$scratch/env-vars
 {
   printf 'TEST_SECRET=%s\n' "$test_secret"
   printf 'OPTIONS_FIXTURES=1\n'
-  printf "JWT_PRIVATE_KEY='%s'\n" "$(cat /tmp/jwt-private-key.txt)"
-  printf "JWKS='%s'\n" "$(cat /tmp/jwks.json)"
+  printf "JWT_PRIVATE_KEY='%s'\n" "$(cat "$scratch/jwt-private-key.txt")"
+  printf "JWKS='%s'\n" "$(cat "$scratch/jwks.json")"
 } >"$vars"
 
-port_free() {
-  ! (exec 3<>"/dev/tcp/127.0.0.1/$1") 2>/dev/null
-}
-
-# Stable across runs so the URLs in .env.local keep working, and spread across
-# checkouts so two of them never want the same pair. Walks on if something else
-# already holds it, which is also what covers a path collision.
-SLOTS=300
-claim_ports() {
-  local seed offset i
-  seed=$(printf '%s' "$PWD" | shasum | cut -c1-4)
-  offset=$((0x$seed % SLOTS))
-  for i in $(seq 0 $((SLOTS - 1))); do
-    cloud_port=$((3210 + 2 * ((offset + i) % SLOTS)))
-    site_port=$((cloud_port + 1))
-    if port_free "$cloud_port" && port_free "$site_port"; then
-      return 0
-    fi
-  done
-  echo "No free port pair between 3210 and $((3210 + 2 * SLOTS - 1))." >&2
-  exit 1
-}
+. scripts/ports.sh
 
 # Creates the deployment, downloads the backend binary, pins the port pair and
 # writes the URLs to .env.local. Only `convex dev` can do this — `convex env`
 # needs a deployment that already exists. Later runs reuse the saved ports.
 if [ ! -f .convex/local/default/config.json ]; then
-  claim_ports
+  claim_ports 3210 2
   bunx convex dev --once --tail-logs disable \
-    --local-cloud-port "$cloud_port" --local-site-port "$site_port"
+    --local-cloud-port "$claimed_port" --local-site-port "$((claimed_port + 1))"
 fi
 
 bunx convex env set --force --from-file "$vars"

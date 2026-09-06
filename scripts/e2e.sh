@@ -13,6 +13,14 @@ cd "$(dirname "$0")/.."
 
 ENV_FILE=.env.local
 
+# The suite needs a Vite server of this checkout's own. On the shared :5173 a
+# second checkout would find the first one's server there and — Playwright
+# reuses an existing one locally — drive that instead: a browser on backend A
+# while the helpers seed backend B. Setting this turns the reuse off too.
+. scripts/ports.sh
+claim_ports 5173 1
+export E2E_WEB_PORT=$claimed_port
+
 if [ -f "$ENV_FILE" ] && ! grep -qE '^CONVEX_DEPLOYMENT=anonymous:' "$ENV_FILE"; then
   set -a
   . "./$ENV_FILE"
@@ -24,7 +32,7 @@ fi
 # (TEST_SECRET, OPTIONS_FIXTURES, auth keys) before the push below.
 scripts/backend-up.sh
 
-status_file=$(mktemp)
+status_file=$(mktemp "${TMPDIR:-/tmp}/woty-e2e.XXXXXX") # BSD mktemp ignores TMPDIR without a template
 trap 'rm -f "$status_file"' EXIT
 
 # `convex dev` owns the backend process, so the suite has to run as its child:

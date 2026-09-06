@@ -25,7 +25,9 @@ one per tool, which is what oxc's docs recommend; there is no shared file).
 ## E2E
 
 `bun run test:web` is `scripts/e2e.sh`. It runs Playwright against a Vite dev
-server on `:5173`, backed by whichever deployment `.env.local` names:
+server on a port of this checkout's own (`E2E_WEB_PORT`, derived from the
+checkout's path the same way the backend ports are), backed by whichever
+deployment `.env.local` names:
 
 - a cloud deployment (`CONVEX_DEPLOYMENT=dev:…`) is sourced and used as is —
   the same command this script replaced;
@@ -48,10 +50,12 @@ Two settings in `playwright.config.ts` matter when reading results:
 - `retries: 1` locally. A spec that fails once and passes on retry is reported
   as **flaky**, and the run is green. Use `--retries 0` to see the real
   failure rate, or read the "flaky" line rather than the exit code.
-- `reuseExistingServer` locally, so a dev server you already have on `:5173`
-  is used as is.
+- `reuseExistingServer`, but only when `E2E_WEB_PORT` is unset: a bare
+  `bunx playwright test` still reuses a dev server you already have on `:5173`.
+  `test:web` sets the variable to a port it claimed free, so it always starts
+  its own server rather than risk adopting another checkout's.
 
-Agent sandboxes usually cannot bind `:5173` (`listen EPERM`), so the
+Agent sandboxes usually cannot bind a Vite port (`listen EPERM`), so the
 pipeline's implement agent cannot run this suite; its gate stage runs
 `bun run gate` outside the agent, against the worktree's own local backend.
 CI runs it against a throwaway Docker Convex backend (`ci.yml` `e2e` job).
@@ -62,7 +66,8 @@ CI runs it against a throwaway Docker Convex backend (`ci.yml` `e2e` job).
 **anonymous local deployment**, a CLI-managed binary with its state under
 `.convex/` (gitignored). No cloud account, no cost, and no way for a push to
 reach anyone else's client. The script picks a port pair from the checkout's
-path so two worktrees can run at once, writes the URLs into `.env.local`, and
+path (`scripts/ports.sh`) so two worktrees can run at once, writes the URLs
+into `.env.local`, and
 sets the switches the e2e suite needs (`TEST_SECRET`, `OPTIONS_FIXTURES`, auth
 keys). After that, `convex:dev`, `dev` and `test:web` all use it with no extra
 flags. It is the pipeline's default, and optional for humans.
@@ -80,7 +85,7 @@ phone testing, the Convex dashboard. The local backend has neither.
 `bun run backend:reset` throws the instance away and rebuilds it from scratch.
 That is the way out of a push refused by rows an earlier run left behind; it
 only ever touches a local deployment, and refuses to run when `.env.local`
-names a cloud one.
+names a cloud one through either `CONVEX_DEPLOYMENT` or `VITE_CONVEX_URL`.
 
 ## The cloud dev deployment is shared
 
