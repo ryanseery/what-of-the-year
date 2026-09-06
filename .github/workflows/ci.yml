@@ -194,7 +194,9 @@ jobs:
 
       - name: Dump backend logs on failure
         if: failure()
-        run: docker logs convex-backend
+        # The build runs before the backend starts, so a build failure reaches
+        # here with no container; don't add a second red step for that.
+        run: docker logs convex-backend || true
 
       - name: Upload test artifacts
         if: ${{ !cancelled() }}
